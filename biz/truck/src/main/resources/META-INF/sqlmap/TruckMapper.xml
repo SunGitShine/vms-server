@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.vms.truck.dao.TruckMapper">
+  <resultMap id="BaseResultMap" type="com.juma.vms.truck.domain.Truck">
+    <id column="truck_id" jdbcType="INTEGER" property="truckId" />
+    <result column="vehicle_id" jdbcType="INTEGER" property="vehicleId" />
+    <result column="plate_number" jdbcType="VARCHAR" property="plateNumber" />
+    <result column="truck_identification_no" jdbcType="VARCHAR" property="truckIdentificationNo" />
+    <result column="license_type" jdbcType="INTEGER" property="licenseType" />
+    <result column="license_certificate_img_1" jdbcType="VARCHAR" property="licenseCertificateImg1" />
+    <result column="license_certificate_img_2" jdbcType="VARCHAR" property="licenseCertificateImg2" />
+    <result column="permit_license_img_1" jdbcType="VARCHAR" property="permitLicenseImg1" />
+    <result column="permit_license_img_2" jdbcType="VARCHAR" property="permitLicenseImg2" />
+    <result column="vehicle_box_type" jdbcType="INTEGER" property="vehicleBoxType" />
+    <result column="vehicle_box_length" jdbcType="INTEGER" property="vehicleBoxLength" />
+    <result column="truck_run_type" jdbcType="INTEGER" property="truckRunType" />
+    <result column="energy_type" jdbcType="INTEGER" property="energyType" />
+    <result column="energy_out_type" jdbcType="INTEGER" property="energyOutType" />
+    <result column="go_city_license_type" jdbcType="INTEGER" property="goCityLicenseType" />
+    <result column="truck_body_img" jdbcType="VARCHAR" property="truckBodyImg" />
+    <result column="is_tail_board" jdbcType="BIT" property="isTailBoard" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    truck_id, vehicle_id, plate_number, truck_identification_no, license_type, license_certificate_img_1, 
+    license_certificate_img_2, permit_license_img_1, permit_license_img_2, vehicle_box_type, 
+    vehicle_box_length, truck_run_type, energy_type, energy_out_type, go_city_license_type, 
+    truck_body_img, is_tail_board, create_time, create_user_id, last_update_time, last_update_user_id
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.vms.truck.domain.TruckExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from truck
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from truck
+    where truck_id = #{truckId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from truck
+    where truck_id = #{truckId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.vms.truck.domain.TruckExample">
+    delete from truck
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="truck_id" keyProperty="truckId" parameterType="com.juma.vms.truck.domain.Truck" useGeneratedKeys="true">
+    insert into truck (vehicle_id, plate_number, truck_identification_no, 
+      license_type, license_certificate_img_1, license_certificate_img_2, 
+      permit_license_img_1, permit_license_img_2, vehicle_box_type, 
+      vehicle_box_length, truck_run_type, energy_type, 
+      energy_out_type, go_city_license_type, truck_body_img, 
+      is_tail_board, create_time, create_user_id, 
+      last_update_time, last_update_user_id)
+    values (#{vehicleId,jdbcType=INTEGER}, #{plateNumber,jdbcType=VARCHAR}, #{truckIdentificationNo,jdbcType=VARCHAR}, 
+      #{licenseType,jdbcType=INTEGER}, #{licenseCertificateImg1,jdbcType=VARCHAR}, #{licenseCertificateImg2,jdbcType=VARCHAR}, 
+      #{permitLicenseImg1,jdbcType=VARCHAR}, #{permitLicenseImg2,jdbcType=VARCHAR}, #{vehicleBoxType,jdbcType=INTEGER}, 
+      #{vehicleBoxLength,jdbcType=INTEGER}, #{truckRunType,jdbcType=INTEGER}, #{energyType,jdbcType=INTEGER}, 
+      #{energyOutType,jdbcType=INTEGER}, #{goCityLicenseType,jdbcType=INTEGER}, #{truckBodyImg,jdbcType=VARCHAR}, 
+      #{isTailBoard,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+      #{lastUpdateTime,jdbcType=TIMESTAMP}, #{lastUpdateUserId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="truck_id" keyProperty="truckId" parameterType="com.juma.vms.truck.domain.Truck" useGeneratedKeys="true">
+    insert into truck
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="vehicleId != null">
+        vehicle_id,
+      </if>
+      <if test="plateNumber != null">
+        plate_number,
+      </if>
+      <if test="truckIdentificationNo != null">
+        truck_identification_no,
+      </if>
+      <if test="licenseType != null">
+        license_type,
+      </if>
+      <if test="licenseCertificateImg1 != null">
+        license_certificate_img_1,
+      </if>
+      <if test="licenseCertificateImg2 != null">
+        license_certificate_img_2,
+      </if>
+      <if test="permitLicenseImg1 != null">
+        permit_license_img_1,
+      </if>
+      <if test="permitLicenseImg2 != null">
+        permit_license_img_2,
+      </if>
+      <if test="vehicleBoxType != null">
+        vehicle_box_type,
+      </if>
+      <if test="vehicleBoxLength != null">
+        vehicle_box_length,
+      </if>
+      <if test="truckRunType != null">
+        truck_run_type,
+      </if>
+      <if test="energyType != null">
+        energy_type,
+      </if>
+      <if test="energyOutType != null">
+        energy_out_type,
+      </if>
+      <if test="goCityLicenseType != null">
+        go_city_license_type,
+      </if>
+      <if test="truckBodyImg != null">
+        truck_body_img,
+      </if>
+      <if test="isTailBoard != null">
+        is_tail_board,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="vehicleId != null">
+        #{vehicleId,jdbcType=INTEGER},
+      </if>
+      <if test="plateNumber != null">
+        #{plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="truckIdentificationNo != null">
+        #{truckIdentificationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseType != null">
+        #{licenseType,jdbcType=INTEGER},
+      </if>
+      <if test="licenseCertificateImg1 != null">
+        #{licenseCertificateImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseCertificateImg2 != null">
+        #{licenseCertificateImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="permitLicenseImg1 != null">
+        #{permitLicenseImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="permitLicenseImg2 != null">
+        #{permitLicenseImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleBoxType != null">
+        #{vehicleBoxType,jdbcType=INTEGER},
+      </if>
+      <if test="vehicleBoxLength != null">
+        #{vehicleBoxLength,jdbcType=INTEGER},
+      </if>
+      <if test="truckRunType != null">
+        #{truckRunType,jdbcType=INTEGER},
+      </if>
+      <if test="energyType != null">
+        #{energyType,jdbcType=INTEGER},
+      </if>
+      <if test="energyOutType != null">
+        #{energyOutType,jdbcType=INTEGER},
+      </if>
+      <if test="goCityLicenseType != null">
+        #{goCityLicenseType,jdbcType=INTEGER},
+      </if>
+      <if test="truckBodyImg != null">
+        #{truckBodyImg,jdbcType=VARCHAR},
+      </if>
+      <if test="isTailBoard != null">
+        #{isTailBoard,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.vms.truck.domain.TruckExample" resultType="java.lang.Long">
+    select count(*) from truck
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update truck
+    <set>
+      <if test="record.truckId != null">
+        truck_id = #{record.truckId,jdbcType=INTEGER},
+      </if>
+      <if test="record.vehicleId != null">
+        vehicle_id = #{record.vehicleId,jdbcType=INTEGER},
+      </if>
+      <if test="record.plateNumber != null">
+        plate_number = #{record.plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.truckIdentificationNo != null">
+        truck_identification_no = #{record.truckIdentificationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.licenseType != null">
+        license_type = #{record.licenseType,jdbcType=INTEGER},
+      </if>
+      <if test="record.licenseCertificateImg1 != null">
+        license_certificate_img_1 = #{record.licenseCertificateImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.licenseCertificateImg2 != null">
+        license_certificate_img_2 = #{record.licenseCertificateImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.permitLicenseImg1 != null">
+        permit_license_img_1 = #{record.permitLicenseImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.permitLicenseImg2 != null">
+        permit_license_img_2 = #{record.permitLicenseImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vehicleBoxType != null">
+        vehicle_box_type = #{record.vehicleBoxType,jdbcType=INTEGER},
+      </if>
+      <if test="record.vehicleBoxLength != null">
+        vehicle_box_length = #{record.vehicleBoxLength,jdbcType=INTEGER},
+      </if>
+      <if test="record.truckRunType != null">
+        truck_run_type = #{record.truckRunType,jdbcType=INTEGER},
+      </if>
+      <if test="record.energyType != null">
+        energy_type = #{record.energyType,jdbcType=INTEGER},
+      </if>
+      <if test="record.energyOutType != null">
+        energy_out_type = #{record.energyOutType,jdbcType=INTEGER},
+      </if>
+      <if test="record.goCityLicenseType != null">
+        go_city_license_type = #{record.goCityLicenseType,jdbcType=INTEGER},
+      </if>
+      <if test="record.truckBodyImg != null">
+        truck_body_img = #{record.truckBodyImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isTailBoard != null">
+        is_tail_board = #{record.isTailBoard,jdbcType=BIT},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.lastUpdateTime != null">
+        last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateUserId != null">
+        last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update truck
+    set truck_id = #{record.truckId,jdbcType=INTEGER},
+      vehicle_id = #{record.vehicleId,jdbcType=INTEGER},
+      plate_number = #{record.plateNumber,jdbcType=VARCHAR},
+      truck_identification_no = #{record.truckIdentificationNo,jdbcType=VARCHAR},
+      license_type = #{record.licenseType,jdbcType=INTEGER},
+      license_certificate_img_1 = #{record.licenseCertificateImg1,jdbcType=VARCHAR},
+      license_certificate_img_2 = #{record.licenseCertificateImg2,jdbcType=VARCHAR},
+      permit_license_img_1 = #{record.permitLicenseImg1,jdbcType=VARCHAR},
+      permit_license_img_2 = #{record.permitLicenseImg2,jdbcType=VARCHAR},
+      vehicle_box_type = #{record.vehicleBoxType,jdbcType=INTEGER},
+      vehicle_box_length = #{record.vehicleBoxLength,jdbcType=INTEGER},
+      truck_run_type = #{record.truckRunType,jdbcType=INTEGER},
+      energy_type = #{record.energyType,jdbcType=INTEGER},
+      energy_out_type = #{record.energyOutType,jdbcType=INTEGER},
+      go_city_license_type = #{record.goCityLicenseType,jdbcType=INTEGER},
+      truck_body_img = #{record.truckBodyImg,jdbcType=VARCHAR},
+      is_tail_board = #{record.isTailBoard,jdbcType=BIT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.vms.truck.domain.Truck">
+    update truck
+    <set>
+      <if test="vehicleId != null">
+        vehicle_id = #{vehicleId,jdbcType=INTEGER},
+      </if>
+      <if test="plateNumber != null">
+        plate_number = #{plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="truckIdentificationNo != null">
+        truck_identification_no = #{truckIdentificationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseType != null">
+        license_type = #{licenseType,jdbcType=INTEGER},
+      </if>
+      <if test="licenseCertificateImg1 != null">
+        license_certificate_img_1 = #{licenseCertificateImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="licenseCertificateImg2 != null">
+        license_certificate_img_2 = #{licenseCertificateImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="permitLicenseImg1 != null">
+        permit_license_img_1 = #{permitLicenseImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="permitLicenseImg2 != null">
+        permit_license_img_2 = #{permitLicenseImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleBoxType != null">
+        vehicle_box_type = #{vehicleBoxType,jdbcType=INTEGER},
+      </if>
+      <if test="vehicleBoxLength != null">
+        vehicle_box_length = #{vehicleBoxLength,jdbcType=INTEGER},
+      </if>
+      <if test="truckRunType != null">
+        truck_run_type = #{truckRunType,jdbcType=INTEGER},
+      </if>
+      <if test="energyType != null">
+        energy_type = #{energyType,jdbcType=INTEGER},
+      </if>
+      <if test="energyOutType != null">
+        energy_out_type = #{energyOutType,jdbcType=INTEGER},
+      </if>
+      <if test="goCityLicenseType != null">
+        go_city_license_type = #{goCityLicenseType,jdbcType=INTEGER},
+      </if>
+      <if test="truckBodyImg != null">
+        truck_body_img = #{truckBodyImg,jdbcType=VARCHAR},
+      </if>
+      <if test="isTailBoard != null">
+        is_tail_board = #{isTailBoard,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where truck_id = #{truckId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.vms.truck.domain.Truck">
+    update truck
+    set vehicle_id = #{vehicleId,jdbcType=INTEGER},
+      plate_number = #{plateNumber,jdbcType=VARCHAR},
+      truck_identification_no = #{truckIdentificationNo,jdbcType=VARCHAR},
+      license_type = #{licenseType,jdbcType=INTEGER},
+      license_certificate_img_1 = #{licenseCertificateImg1,jdbcType=VARCHAR},
+      license_certificate_img_2 = #{licenseCertificateImg2,jdbcType=VARCHAR},
+      permit_license_img_1 = #{permitLicenseImg1,jdbcType=VARCHAR},
+      permit_license_img_2 = #{permitLicenseImg2,jdbcType=VARCHAR},
+      vehicle_box_type = #{vehicleBoxType,jdbcType=INTEGER},
+      vehicle_box_length = #{vehicleBoxLength,jdbcType=INTEGER},
+      truck_run_type = #{truckRunType,jdbcType=INTEGER},
+      energy_type = #{energyType,jdbcType=INTEGER},
+      energy_out_type = #{energyOutType,jdbcType=INTEGER},
+      go_city_license_type = #{goCityLicenseType,jdbcType=INTEGER},
+      truck_body_img = #{truckBodyImg,jdbcType=VARCHAR},
+      is_tail_board = #{isTailBoard,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER}
+    where truck_id = #{truckId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="truckId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into truck
+    (vehicle_id,plate_number,truck_identification_no,license_type,license_certificate_img_1,license_certificate_img_2,permit_license_img_1,permit_license_img_2,vehicle_box_type,vehicle_box_length,truck_run_type,energy_type,energy_out_type,go_city_license_type,truck_body_img,is_tail_board,create_time,create_user_id,last_update_time,last_update_user_id) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.vehicleId},#{item.plateNumber},#{item.truckIdentificationNo},#{item.licenseType},#{item.licenseCertificateImg1},#{item.licenseCertificateImg2},#{item.permitLicenseImg1},#{item.permitLicenseImg2},#{item.vehicleBoxType},#{item.vehicleBoxLength},#{item.truckRunType},#{item.energyType},#{item.energyOutType},#{item.goCityLicenseType},#{item.truckBodyImg},#{item.isTailBoard},#{item.createTime},#{item.createUserId},#{item.lastUpdateTime},#{item.lastUpdateUserId})
+    </foreach>
+  </insert>
+  <update id="updateBatch" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update truck
+      <set>
+        truck_id = #{item.truckId},
+        vehicle_id = #{item.vehicleId},
+        plate_number = #{item.plateNumber},
+        truck_identification_no = #{item.truckIdentificationNo},
+        license_type = #{item.licenseType},
+        license_certificate_img_1 = #{item.licenseCertificateImg1},
+        license_certificate_img_2 = #{item.licenseCertificateImg2},
+        permit_license_img_1 = #{item.permitLicenseImg1},
+        permit_license_img_2 = #{item.permitLicenseImg2},
+        vehicle_box_type = #{item.vehicleBoxType},
+        vehicle_box_length = #{item.vehicleBoxLength},
+        truck_run_type = #{item.truckRunType},
+        energy_type = #{item.energyType},
+        energy_out_type = #{item.energyOutType},
+        go_city_license_type = #{item.goCityLicenseType},
+        truck_body_img = #{item.truckBodyImg},
+        is_tail_board = #{item.isTailBoard},
+        create_time = #{item.createTime},
+        create_user_id = #{item.createUserId},
+        last_update_time = #{item.lastUpdateTime},
+        last_update_user_id = #{item.lastUpdateUserId},
+      </set>
+      where truck_id = #{item.truckId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update truck
+      <set>
+        <if test="item.vehicleId != null">
+          vehicle_id = #{item.vehicleId,jdbcType=INTEGER},
+        </if>
+        <if test="item.plateNumber != null">
+          plate_number = #{item.plateNumber,jdbcType=VARCHAR},
+        </if>
+        <if test="item.truckIdentificationNo != null">
+          truck_identification_no = #{item.truckIdentificationNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.licenseType != null">
+          license_type = #{item.licenseType,jdbcType=INTEGER},
+        </if>
+        <if test="item.licenseCertificateImg1 != null">
+          license_certificate_img_1 = #{item.licenseCertificateImg1,jdbcType=VARCHAR},
+        </if>
+        <if test="item.licenseCertificateImg2 != null">
+          license_certificate_img_2 = #{item.licenseCertificateImg2,jdbcType=VARCHAR},
+        </if>
+        <if test="item.permitLicenseImg1 != null">
+          permit_license_img_1 = #{item.permitLicenseImg1,jdbcType=VARCHAR},
+        </if>
+        <if test="item.permitLicenseImg2 != null">
+          permit_license_img_2 = #{item.permitLicenseImg2,jdbcType=VARCHAR},
+        </if>
+        <if test="item.vehicleBoxType != null">
+          vehicle_box_type = #{item.vehicleBoxType,jdbcType=INTEGER},
+        </if>
+        <if test="item.vehicleBoxLength != null">
+          vehicle_box_length = #{item.vehicleBoxLength,jdbcType=INTEGER},
+        </if>
+        <if test="item.truckRunType != null">
+          truck_run_type = #{item.truckRunType,jdbcType=INTEGER},
+        </if>
+        <if test="item.energyType != null">
+          energy_type = #{item.energyType,jdbcType=INTEGER},
+        </if>
+        <if test="item.energyOutType != null">
+          energy_out_type = #{item.energyOutType,jdbcType=INTEGER},
+        </if>
+        <if test="item.goCityLicenseType != null">
+          go_city_license_type = #{item.goCityLicenseType,jdbcType=INTEGER},
+        </if>
+        <if test="item.truckBodyImg != null">
+          truck_body_img = #{item.truckBodyImg,jdbcType=VARCHAR},
+        </if>
+        <if test="item.isTailBoard != null">
+          is_tail_board = #{item.isTailBoard,jdbcType=BIT},
+        </if>
+        <if test="item.createTime != null">
+          create_time = #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createUserId != null">
+          create_user_id = #{item.createUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.lastUpdateTime != null">
+          last_update_time = #{item.lastUpdateTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.lastUpdateUserId != null">
+          last_update_user_id = #{item.lastUpdateUserId,jdbcType=INTEGER},
+        </if>
+      </set>
+      where truck_id = #{item.truckId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

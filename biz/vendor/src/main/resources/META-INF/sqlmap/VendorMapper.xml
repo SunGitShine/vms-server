@@ -1,0 +1,891 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.vms.vendor.dao.VendorMapper">
+  <resultMap id="BaseResultMap" type="com.juma.vms.vendor.domain.Vendor">
+    <id column="vendor_id" jdbcType="INTEGER" property="vendorId" />
+    <result column="juma_pin" jdbcType="VARCHAR" property="jumaPin" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="vendor_name" jdbcType="VARCHAR" property="vendorName" />
+    <result column="serial_no" jdbcType="VARCHAR" property="serialNo" />
+    <result column="contact_user_name" jdbcType="VARCHAR" property="contactUserName" />
+    <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
+    <result column="emergency_contact_phone" jdbcType="VARCHAR" property="emergencyContactPhone" />
+    <result column="id_card_no" jdbcType="VARCHAR" property="idCardNo" />
+    <result column="id_card_no_expire_time" jdbcType="TIMESTAMP" property="idCardNoExpireTime" />
+    <result column="tax_no" jdbcType="VARCHAR" property="taxNo" />
+    <result column="source" jdbcType="TINYINT" property="source" />
+    <result column="vendor_source" jdbcType="TINYINT" property="vendorSource" />
+    <result column="bank_of_deposit" jdbcType="VARCHAR" property="bankOfDeposit" />
+    <result column="bank_account" jdbcType="VARCHAR" property="bankAccount" />
+    <result column="enterprise_code" jdbcType="VARCHAR" property="enterpriseCode" />
+    <result column="skill_license_expire_time" jdbcType="TIMESTAMP" property="skillLicenseExpireTime" />
+    <result column="vendor_type" jdbcType="TINYINT" property="vendorType" />
+    <result column="id_card_img_1" jdbcType="VARCHAR" property="idCardImg1" />
+    <result column="id_card_img_2" jdbcType="VARCHAR" property="idCardImg2" />
+    <result column="quality_cert_img_1" jdbcType="VARCHAR" property="qualityCertImg1" />
+    <result column="quality_cert_img_2" jdbcType="VARCHAR" property="qualityCertImg2" />
+    <result column="road_trans_permit_img_1" jdbcType="VARCHAR" property="roadTransPermitImg1" />
+    <result column="road_trans_permit_img_2" jdbcType="VARCHAR" property="roadTransPermitImg2" />
+    <result column="business_license_img_1" jdbcType="VARCHAR" property="businessLicenseImg1" />
+    <result column="business_license_img_2" jdbcType="VARCHAR" property="businessLicenseImg2" />
+    <result column="vendor_address" jdbcType="VARCHAR" property="vendorAddress" />
+    <result column="is_show_your_price" jdbcType="TINYINT" property="isShowYourPrice" />
+    <result column="is_sync_as_vendor" jdbcType="TINYINT" property="isSyncAsVendor" />
+    <result column="is_sync_as_driver" jdbcType="TINYINT" property="isSyncAsDriver" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+    <result column="is_open" jdbcType="TINYINT" property="isOpen" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    vendor_id, juma_pin, user_id, vendor_name, serial_no, contact_user_name, contact_phone, 
+    emergency_contact_phone, id_card_no, id_card_no_expire_time, tax_no, source, vendor_source, 
+    bank_of_deposit, bank_account, enterprise_code, skill_license_expire_time, vendor_type, 
+    id_card_img_1, id_card_img_2, quality_cert_img_1, quality_cert_img_2, road_trans_permit_img_1, 
+    road_trans_permit_img_2, business_license_img_1, business_license_img_2, vendor_address, 
+    is_show_your_price, is_sync_as_vendor, is_sync_as_driver, is_delete, is_open, remark, 
+    create_user_id, create_time, last_update_time, last_update_user_id
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.vms.vendor.domain.VendorExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from vendor
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from vendor
+    where vendor_id = #{vendorId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from vendor
+    where vendor_id = #{vendorId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.vms.vendor.domain.VendorExample">
+    delete from vendor
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="vendor_id" keyProperty="vendorId" parameterType="com.juma.vms.vendor.domain.Vendor" useGeneratedKeys="true">
+    insert into vendor (juma_pin, user_id, vendor_name,
+      serial_no, contact_user_name, contact_phone,
+      emergency_contact_phone, id_card_no, id_card_no_expire_time, 
+      tax_no, source, vendor_source, 
+      bank_of_deposit, bank_account, enterprise_code, 
+      skill_license_expire_time, vendor_type, id_card_img_1, 
+      id_card_img_2, quality_cert_img_1, quality_cert_img_2, 
+      road_trans_permit_img_1, road_trans_permit_img_2, 
+      business_license_img_1, business_license_img_2, 
+      vendor_address, is_show_your_price, is_sync_as_vendor, 
+      is_sync_as_driver, is_delete, is_open, 
+      remark, create_user_id, create_time, 
+      last_update_time, last_update_user_id)
+    values (#{jumaPin,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{vendorName,jdbcType=VARCHAR}, 
+      #{serialNo,jdbcType=VARCHAR}, #{contactUserName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, 
+      #{emergencyContactPhone,jdbcType=VARCHAR}, #{idCardNo,jdbcType=VARCHAR}, #{idCardNoExpireTime,jdbcType=TIMESTAMP}, 
+      #{taxNo,jdbcType=VARCHAR}, #{source,jdbcType=TINYINT}, #{vendorSource,jdbcType=TINYINT}, 
+      #{bankOfDeposit,jdbcType=VARCHAR}, #{bankAccount,jdbcType=VARCHAR}, #{enterpriseCode,jdbcType=VARCHAR}, 
+      #{skillLicenseExpireTime,jdbcType=TIMESTAMP}, #{vendorType,jdbcType=TINYINT}, #{idCardImg1,jdbcType=VARCHAR}, 
+      #{idCardImg2,jdbcType=VARCHAR}, #{qualityCertImg1,jdbcType=VARCHAR}, #{qualityCertImg2,jdbcType=VARCHAR}, 
+      #{roadTransPermitImg1,jdbcType=VARCHAR}, #{roadTransPermitImg2,jdbcType=VARCHAR}, 
+      #{businessLicenseImg1,jdbcType=VARCHAR}, #{businessLicenseImg2,jdbcType=VARCHAR}, 
+      #{vendorAddress,jdbcType=VARCHAR}, #{isShowYourPrice,jdbcType=TINYINT}, #{isSyncAsVendor,jdbcType=TINYINT}, 
+      #{isSyncAsDriver,jdbcType=TINYINT}, #{isDelete,jdbcType=TINYINT}, #{isOpen,jdbcType=TINYINT}, 
+      #{remark,jdbcType=VARCHAR}, #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{lastUpdateTime,jdbcType=TIMESTAMP}, #{lastUpdateUserId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="vendor_id" keyProperty="vendorId" parameterType="com.juma.vms.vendor.domain.Vendor" useGeneratedKeys="true">
+    insert into vendor
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="jumaPin != null">
+        juma_pin,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="vendorName != null">
+        vendor_name,
+      </if>
+      <if test="serialNo != null">
+        serial_no,
+      </if>
+      <if test="contactUserName != null">
+        contact_user_name,
+      </if>
+      <if test="contactPhone != null">
+        contact_phone,
+      </if>
+      <if test="emergencyContactPhone != null">
+        emergency_contact_phone,
+      </if>
+      <if test="idCardNo != null">
+        id_card_no,
+      </if>
+      <if test="idCardNoExpireTime != null">
+        id_card_no_expire_time,
+      </if>
+      <if test="taxNo != null">
+        tax_no,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="vendorSource != null">
+        vendor_source,
+      </if>
+      <if test="bankOfDeposit != null">
+        bank_of_deposit,
+      </if>
+      <if test="bankAccount != null">
+        bank_account,
+      </if>
+      <if test="enterpriseCode != null">
+        enterprise_code,
+      </if>
+      <if test="skillLicenseExpireTime != null">
+        skill_license_expire_time,
+      </if>
+      <if test="vendorType != null">
+        vendor_type,
+      </if>
+      <if test="idCardImg1 != null">
+        id_card_img_1,
+      </if>
+      <if test="idCardImg2 != null">
+        id_card_img_2,
+      </if>
+      <if test="qualityCertImg1 != null">
+        quality_cert_img_1,
+      </if>
+      <if test="qualityCertImg2 != null">
+        quality_cert_img_2,
+      </if>
+      <if test="roadTransPermitImg1 != null">
+        road_trans_permit_img_1,
+      </if>
+      <if test="roadTransPermitImg2 != null">
+        road_trans_permit_img_2,
+      </if>
+      <if test="businessLicenseImg1 != null">
+        business_license_img_1,
+      </if>
+      <if test="businessLicenseImg2 != null">
+        business_license_img_2,
+      </if>
+      <if test="vendorAddress != null">
+        vendor_address,
+      </if>
+      <if test="isShowYourPrice != null">
+        is_show_your_price,
+      </if>
+      <if test="isSyncAsVendor != null">
+        is_sync_as_vendor,
+      </if>
+      <if test="isSyncAsDriver != null">
+        is_sync_as_driver,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="isOpen != null">
+        is_open,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="jumaPin != null">
+        #{jumaPin,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorName != null">
+        #{vendorName,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNo != null">
+        #{serialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="contactUserName != null">
+        #{contactUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null">
+        #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="emergencyContactPhone != null">
+        #{emergencyContactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardNo != null">
+        #{idCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardNoExpireTime != null">
+        #{idCardNoExpireTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taxNo != null">
+        #{taxNo,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=TINYINT},
+      </if>
+      <if test="vendorSource != null">
+        #{vendorSource,jdbcType=TINYINT},
+      </if>
+      <if test="bankOfDeposit != null">
+        #{bankOfDeposit,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null">
+        #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="enterpriseCode != null">
+        #{enterpriseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skillLicenseExpireTime != null">
+        #{skillLicenseExpireTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vendorType != null">
+        #{vendorType,jdbcType=TINYINT},
+      </if>
+      <if test="idCardImg1 != null">
+        #{idCardImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardImg2 != null">
+        #{idCardImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="qualityCertImg1 != null">
+        #{qualityCertImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="qualityCertImg2 != null">
+        #{qualityCertImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="roadTransPermitImg1 != null">
+        #{roadTransPermitImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="roadTransPermitImg2 != null">
+        #{roadTransPermitImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseImg1 != null">
+        #{businessLicenseImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseImg2 != null">
+        #{businessLicenseImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorAddress != null">
+        #{vendorAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="isShowYourPrice != null">
+        #{isShowYourPrice,jdbcType=TINYINT},
+      </if>
+      <if test="isSyncAsVendor != null">
+        #{isSyncAsVendor,jdbcType=TINYINT},
+      </if>
+      <if test="isSyncAsDriver != null">
+        #{isSyncAsDriver,jdbcType=TINYINT},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="isOpen != null">
+        #{isOpen,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.vms.vendor.domain.VendorExample" resultType="java.lang.Long">
+    select count(*) from vendor
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update vendor
+    <set>
+      <if test="record.vendorId != null">
+        vendor_id = #{record.vendorId,jdbcType=INTEGER},
+      </if>
+      <if test="record.jumaPin != null">
+        juma_pin = #{record.jumaPin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.vendorName != null">
+        vendor_name = #{record.vendorName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNo != null">
+        serial_no = #{record.serialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactUserName != null">
+        contact_user_name = #{record.contactUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactPhone != null">
+        contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.emergencyContactPhone != null">
+        emergency_contact_phone = #{record.emergencyContactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idCardNo != null">
+        id_card_no = #{record.idCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idCardNoExpireTime != null">
+        id_card_no_expire_time = #{record.idCardNoExpireTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.taxNo != null">
+        tax_no = #{record.taxNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.source != null">
+        source = #{record.source,jdbcType=TINYINT},
+      </if>
+      <if test="record.vendorSource != null">
+        vendor_source = #{record.vendorSource,jdbcType=TINYINT},
+      </if>
+      <if test="record.bankOfDeposit != null">
+        bank_of_deposit = #{record.bankOfDeposit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankAccount != null">
+        bank_account = #{record.bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.enterpriseCode != null">
+        enterprise_code = #{record.enterpriseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.skillLicenseExpireTime != null">
+        skill_license_expire_time = #{record.skillLicenseExpireTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.vendorType != null">
+        vendor_type = #{record.vendorType,jdbcType=TINYINT},
+      </if>
+      <if test="record.idCardImg1 != null">
+        id_card_img_1 = #{record.idCardImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idCardImg2 != null">
+        id_card_img_2 = #{record.idCardImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qualityCertImg1 != null">
+        quality_cert_img_1 = #{record.qualityCertImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qualityCertImg2 != null">
+        quality_cert_img_2 = #{record.qualityCertImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roadTransPermitImg1 != null">
+        road_trans_permit_img_1 = #{record.roadTransPermitImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roadTransPermitImg2 != null">
+        road_trans_permit_img_2 = #{record.roadTransPermitImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessLicenseImg1 != null">
+        business_license_img_1 = #{record.businessLicenseImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessLicenseImg2 != null">
+        business_license_img_2 = #{record.businessLicenseImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vendorAddress != null">
+        vendor_address = #{record.vendorAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isShowYourPrice != null">
+        is_show_your_price = #{record.isShowYourPrice,jdbcType=TINYINT},
+      </if>
+      <if test="record.isSyncAsVendor != null">
+        is_sync_as_vendor = #{record.isSyncAsVendor,jdbcType=TINYINT},
+      </if>
+      <if test="record.isSyncAsDriver != null">
+        is_sync_as_driver = #{record.isSyncAsDriver,jdbcType=TINYINT},
+      </if>
+      <if test="record.isDelete != null">
+        is_delete = #{record.isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="record.isOpen != null">
+        is_open = #{record.isOpen,jdbcType=TINYINT},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateTime != null">
+        last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateUserId != null">
+        last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update vendor
+    set vendor_id = #{record.vendorId,jdbcType=INTEGER},
+      juma_pin = #{record.jumaPin,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      vendor_name = #{record.vendorName,jdbcType=VARCHAR},
+      serial_no = #{record.serialNo,jdbcType=VARCHAR},
+      contact_user_name = #{record.contactUserName,jdbcType=VARCHAR},
+      contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
+      emergency_contact_phone = #{record.emergencyContactPhone,jdbcType=VARCHAR},
+      id_card_no = #{record.idCardNo,jdbcType=VARCHAR},
+      id_card_no_expire_time = #{record.idCardNoExpireTime,jdbcType=TIMESTAMP},
+      tax_no = #{record.taxNo,jdbcType=VARCHAR},
+      source = #{record.source,jdbcType=TINYINT},
+      vendor_source = #{record.vendorSource,jdbcType=TINYINT},
+      bank_of_deposit = #{record.bankOfDeposit,jdbcType=VARCHAR},
+      bank_account = #{record.bankAccount,jdbcType=VARCHAR},
+      enterprise_code = #{record.enterpriseCode,jdbcType=VARCHAR},
+      skill_license_expire_time = #{record.skillLicenseExpireTime,jdbcType=TIMESTAMP},
+      vendor_type = #{record.vendorType,jdbcType=TINYINT},
+      id_card_img_1 = #{record.idCardImg1,jdbcType=VARCHAR},
+      id_card_img_2 = #{record.idCardImg2,jdbcType=VARCHAR},
+      quality_cert_img_1 = #{record.qualityCertImg1,jdbcType=VARCHAR},
+      quality_cert_img_2 = #{record.qualityCertImg2,jdbcType=VARCHAR},
+      road_trans_permit_img_1 = #{record.roadTransPermitImg1,jdbcType=VARCHAR},
+      road_trans_permit_img_2 = #{record.roadTransPermitImg2,jdbcType=VARCHAR},
+      business_license_img_1 = #{record.businessLicenseImg1,jdbcType=VARCHAR},
+      business_license_img_2 = #{record.businessLicenseImg2,jdbcType=VARCHAR},
+      vendor_address = #{record.vendorAddress,jdbcType=VARCHAR},
+      is_show_your_price = #{record.isShowYourPrice,jdbcType=TINYINT},
+      is_sync_as_vendor = #{record.isSyncAsVendor,jdbcType=TINYINT},
+      is_sync_as_driver = #{record.isSyncAsDriver,jdbcType=TINYINT},
+      is_delete = #{record.isDelete,jdbcType=TINYINT},
+      is_open = #{record.isOpen,jdbcType=TINYINT},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.vms.vendor.domain.Vendor">
+    update vendor
+    <set>
+      <if test="jumaPin != null">
+        juma_pin = #{jumaPin,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="vendorName != null">
+        vendor_name = #{vendorName,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNo != null">
+        serial_no = #{serialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="contactUserName != null">
+        contact_user_name = #{contactUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null">
+        contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="emergencyContactPhone != null">
+        emergency_contact_phone = #{emergencyContactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardNo != null">
+        id_card_no = #{idCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardNoExpireTime != null">
+        id_card_no_expire_time = #{idCardNoExpireTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taxNo != null">
+        tax_no = #{taxNo,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        source = #{source,jdbcType=TINYINT},
+      </if>
+      <if test="vendorSource != null">
+        vendor_source = #{vendorSource,jdbcType=TINYINT},
+      </if>
+      <if test="bankOfDeposit != null">
+        bank_of_deposit = #{bankOfDeposit,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null">
+        bank_account = #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="enterpriseCode != null">
+        enterprise_code = #{enterpriseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skillLicenseExpireTime != null">
+        skill_license_expire_time = #{skillLicenseExpireTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vendorType != null">
+        vendor_type = #{vendorType,jdbcType=TINYINT},
+      </if>
+      <if test="idCardImg1 != null">
+        id_card_img_1 = #{idCardImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardImg2 != null">
+        id_card_img_2 = #{idCardImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="qualityCertImg1 != null">
+        quality_cert_img_1 = #{qualityCertImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="qualityCertImg2 != null">
+        quality_cert_img_2 = #{qualityCertImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="roadTransPermitImg1 != null">
+        road_trans_permit_img_1 = #{roadTransPermitImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="roadTransPermitImg2 != null">
+        road_trans_permit_img_2 = #{roadTransPermitImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseImg1 != null">
+        business_license_img_1 = #{businessLicenseImg1,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseImg2 != null">
+        business_license_img_2 = #{businessLicenseImg2,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorAddress != null">
+        vendor_address = #{vendorAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="isShowYourPrice != null">
+        is_show_your_price = #{isShowYourPrice,jdbcType=TINYINT},
+      </if>
+      <if test="isSyncAsVendor != null">
+        is_sync_as_vendor = #{isSyncAsVendor,jdbcType=TINYINT},
+      </if>
+      <if test="isSyncAsDriver != null">
+        is_sync_as_driver = #{isSyncAsDriver,jdbcType=TINYINT},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+      <if test="isOpen != null">
+        is_open = #{isOpen,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where vendor_id = #{vendorId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.vms.vendor.domain.Vendor">
+    update vendor
+    set juma_pin = #{jumaPin,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      vendor_name = #{vendorName,jdbcType=VARCHAR},
+      serial_no = #{serialNo,jdbcType=VARCHAR},
+      contact_user_name = #{contactUserName,jdbcType=VARCHAR},
+      contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      emergency_contact_phone = #{emergencyContactPhone,jdbcType=VARCHAR},
+      id_card_no = #{idCardNo,jdbcType=VARCHAR},
+      id_card_no_expire_time = #{idCardNoExpireTime,jdbcType=TIMESTAMP},
+      tax_no = #{taxNo,jdbcType=VARCHAR},
+      source = #{source,jdbcType=TINYINT},
+      vendor_source = #{vendorSource,jdbcType=TINYINT},
+      bank_of_deposit = #{bankOfDeposit,jdbcType=VARCHAR},
+      bank_account = #{bankAccount,jdbcType=VARCHAR},
+      enterprise_code = #{enterpriseCode,jdbcType=VARCHAR},
+      skill_license_expire_time = #{skillLicenseExpireTime,jdbcType=TIMESTAMP},
+      vendor_type = #{vendorType,jdbcType=TINYINT},
+      id_card_img_1 = #{idCardImg1,jdbcType=VARCHAR},
+      id_card_img_2 = #{idCardImg2,jdbcType=VARCHAR},
+      quality_cert_img_1 = #{qualityCertImg1,jdbcType=VARCHAR},
+      quality_cert_img_2 = #{qualityCertImg2,jdbcType=VARCHAR},
+      road_trans_permit_img_1 = #{roadTransPermitImg1,jdbcType=VARCHAR},
+      road_trans_permit_img_2 = #{roadTransPermitImg2,jdbcType=VARCHAR},
+      business_license_img_1 = #{businessLicenseImg1,jdbcType=VARCHAR},
+      business_license_img_2 = #{businessLicenseImg2,jdbcType=VARCHAR},
+      vendor_address = #{vendorAddress,jdbcType=VARCHAR},
+      is_show_your_price = #{isShowYourPrice,jdbcType=TINYINT},
+      is_sync_as_vendor = #{isSyncAsVendor,jdbcType=TINYINT},
+      is_sync_as_driver = #{isSyncAsDriver,jdbcType=TINYINT},
+      is_delete = #{isDelete,jdbcType=TINYINT},
+      is_open = #{isOpen,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER}
+    where vendor_id = #{vendorId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="vendorId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into vendor
+    (juma_pin,user_id,vendor_name,serial_no,contact_user_name,contact_phone,emergency_contact_phone,id_card_no,id_card_no_expire_time,tax_no,source,vendor_source,bank_of_deposit,bank_account,enterprise_code,skill_license_expire_time,vendor_type,id_card_img_1,id_card_img_2,quality_cert_img_1,quality_cert_img_2,road_trans_permit_img_1,road_trans_permit_img_2,business_license_img_1,business_license_img_2,vendor_address,is_show_your_price,is_sync_as_vendor,is_sync_as_driver,is_delete,is_open,remark,create_user_id,create_time,last_update_time,last_update_user_id) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.jumaPin},#{item.userId},#{item.vendorName},#{item.serialNo},#{item.contactUserName},#{item.contactPhone},#{item.emergencyContactPhone},#{item.idCardNo},#{item.idCardNoExpireTime},#{item.taxNo},#{item.source},#{item.vendorSource},#{item.bankOfDeposit},#{item.bankAccount},#{item.enterpriseCode},#{item.skillLicenseExpireTime},#{item.vendorType},#{item.idCardImg1},#{item.idCardImg2},#{item.qualityCertImg1},#{item.qualityCertImg2},#{item.roadTransPermitImg1},#{item.roadTransPermitImg2},#{item.businessLicenseImg1},#{item.businessLicenseImg2},#{item.vendorAddress},#{item.isShowYourPrice},#{item.isSyncAsVendor},#{item.isSyncAsDriver},#{item.isDelete},#{item.isOpen},#{item.remark},#{item.createUserId},#{item.createTime},#{item.lastUpdateTime},#{item.lastUpdateUserId})
+    </foreach>
+  </insert>
+  <update id="updateBatch" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update vendor
+      <set>
+        vendor_id = #{item.vendorId},
+        juma_pin = #{item.jumaPin},
+        user_id = #{item.userId},
+        vendor_name = #{item.vendorName},
+        serial_no = #{item.serialNo},
+        contact_user_name = #{item.contactUserName},
+        contact_phone = #{item.contactPhone},
+        emergency_contact_phone = #{item.emergencyContactPhone},
+        id_card_no = #{item.idCardNo},
+        id_card_no_expire_time = #{item.idCardNoExpireTime},
+        tax_no = #{item.taxNo},
+        source = #{item.source},
+        vendor_source = #{item.vendorSource},
+        bank_of_deposit = #{item.bankOfDeposit},
+        bank_account = #{item.bankAccount},
+        enterprise_code = #{item.enterpriseCode},
+        skill_license_expire_time = #{item.skillLicenseExpireTime},
+        vendor_type = #{item.vendorType},
+        id_card_img_1 = #{item.idCardImg1},
+        id_card_img_2 = #{item.idCardImg2},
+        quality_cert_img_1 = #{item.qualityCertImg1},
+        quality_cert_img_2 = #{item.qualityCertImg2},
+        road_trans_permit_img_1 = #{item.roadTransPermitImg1},
+        road_trans_permit_img_2 = #{item.roadTransPermitImg2},
+        business_license_img_1 = #{item.businessLicenseImg1},
+        business_license_img_2 = #{item.businessLicenseImg2},
+        vendor_address = #{item.vendorAddress},
+        is_show_your_price = #{item.isShowYourPrice},
+        is_sync_as_vendor = #{item.isSyncAsVendor},
+        is_sync_as_driver = #{item.isSyncAsDriver},
+        is_delete = #{item.isDelete},
+        is_open = #{item.isOpen},
+        remark = #{item.remark},
+        create_user_id = #{item.createUserId},
+        create_time = #{item.createTime},
+        last_update_time = #{item.lastUpdateTime},
+        last_update_user_id = #{item.lastUpdateUserId},
+      </set>
+      where vendor_id = #{item.vendorId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update vendor
+      <set>
+        <if test="item.jumaPin != null">
+          juma_pin = #{item.jumaPin,jdbcType=VARCHAR},
+        </if>
+        <if test="item.userId != null">
+          user_id = #{item.userId,jdbcType=INTEGER},
+        </if>
+        <if test="item.vendorName != null">
+          vendor_name = #{item.vendorName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.serialNo != null">
+          serial_no = #{item.serialNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.contactUserName != null">
+          contact_user_name = #{item.contactUserName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.contactPhone != null">
+          contact_phone = #{item.contactPhone,jdbcType=VARCHAR},
+        </if>
+        <if test="item.emergencyContactPhone != null">
+          emergency_contact_phone = #{item.emergencyContactPhone,jdbcType=VARCHAR},
+        </if>
+        <if test="item.idCardNo != null">
+          id_card_no = #{item.idCardNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.idCardNoExpireTime != null">
+          id_card_no_expire_time = #{item.idCardNoExpireTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.taxNo != null">
+          tax_no = #{item.taxNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.source != null">
+          source = #{item.source,jdbcType=TINYINT},
+        </if>
+        <if test="item.vendorSource != null">
+          vendor_source = #{item.vendorSource,jdbcType=TINYINT},
+        </if>
+        <if test="item.bankOfDeposit != null">
+          bank_of_deposit = #{item.bankOfDeposit,jdbcType=VARCHAR},
+        </if>
+        <if test="item.bankAccount != null">
+          bank_account = #{item.bankAccount,jdbcType=VARCHAR},
+        </if>
+        <if test="item.enterpriseCode != null">
+          enterprise_code = #{item.enterpriseCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.skillLicenseExpireTime != null">
+          skill_license_expire_time = #{item.skillLicenseExpireTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.vendorType != null">
+          vendor_type = #{item.vendorType,jdbcType=TINYINT},
+        </if>
+        <if test="item.idCardImg1 != null">
+          id_card_img_1 = #{item.idCardImg1,jdbcType=VARCHAR},
+        </if>
+        <if test="item.idCardImg2 != null">
+          id_card_img_2 = #{item.idCardImg2,jdbcType=VARCHAR},
+        </if>
+        <if test="item.qualityCertImg1 != null">
+          quality_cert_img_1 = #{item.qualityCertImg1,jdbcType=VARCHAR},
+        </if>
+        <if test="item.qualityCertImg2 != null">
+          quality_cert_img_2 = #{item.qualityCertImg2,jdbcType=VARCHAR},
+        </if>
+        <if test="item.roadTransPermitImg1 != null">
+          road_trans_permit_img_1 = #{item.roadTransPermitImg1,jdbcType=VARCHAR},
+        </if>
+        <if test="item.roadTransPermitImg2 != null">
+          road_trans_permit_img_2 = #{item.roadTransPermitImg2,jdbcType=VARCHAR},
+        </if>
+        <if test="item.businessLicenseImg1 != null">
+          business_license_img_1 = #{item.businessLicenseImg1,jdbcType=VARCHAR},
+        </if>
+        <if test="item.businessLicenseImg2 != null">
+          business_license_img_2 = #{item.businessLicenseImg2,jdbcType=VARCHAR},
+        </if>
+        <if test="item.vendorAddress != null">
+          vendor_address = #{item.vendorAddress,jdbcType=VARCHAR},
+        </if>
+        <if test="item.isShowYourPrice != null">
+          is_show_your_price = #{item.isShowYourPrice,jdbcType=TINYINT},
+        </if>
+        <if test="item.isSyncAsVendor != null">
+          is_sync_as_vendor = #{item.isSyncAsVendor,jdbcType=TINYINT},
+        </if>
+        <if test="item.isSyncAsDriver != null">
+          is_sync_as_driver = #{item.isSyncAsDriver,jdbcType=TINYINT},
+        </if>
+        <if test="item.isDelete != null">
+          is_delete = #{item.isDelete,jdbcType=TINYINT},
+        </if>
+        <if test="item.isOpen != null">
+          is_open = #{item.isOpen,jdbcType=TINYINT},
+        </if>
+        <if test="item.remark != null">
+          remark = #{item.remark,jdbcType=VARCHAR},
+        </if>
+        <if test="item.createUserId != null">
+          create_user_id = #{item.createUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.createTime != null">
+          create_time = #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.lastUpdateTime != null">
+          last_update_time = #{item.lastUpdateTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.lastUpdateUserId != null">
+          last_update_user_id = #{item.lastUpdateUserId,jdbcType=INTEGER},
+        </if>
+      </set>
+      where vendor_id = #{item.vendorId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.vms.operateLog.dao.OperateLogMapper">
+  <resultMap id="BaseResultMap" type="com.juma.vms.operateLog.domain.OperateLog">
+    <id column="operate_log_id" jdbcType="INTEGER" property="operateLogId" />
+    <result column="log_sign" jdbcType="TINYINT" property="logSign" />
+    <result column="relation_table_id" jdbcType="INTEGER" property="relationTableId" />
+    <result column="operate_type" jdbcType="TINYINT" property="operateType" />
+    <result column="operate_applicatoin" jdbcType="TINYINT" property="operateApplicatoin" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    operate_log_id, log_sign, relation_table_id, operate_type, operate_applicatoin, create_user_id, 
+    create_time, remark
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.vms.operateLog.domain.OperateLogExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from operate_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from operate_log
+    where operate_log_id = #{operateLogId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from operate_log
+    where operate_log_id = #{operateLogId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.vms.operateLog.domain.OperateLogExample">
+    delete from operate_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="operate_log_id" keyProperty="operateLogId" parameterType="com.juma.vms.operateLog.domain.OperateLog" useGeneratedKeys="true">
+    insert into operate_log (log_sign, relation_table_id, operate_type, 
+      operate_applicatoin, create_user_id, create_time, 
+      remark)
+    values (#{logSign,jdbcType=TINYINT}, #{relationTableId,jdbcType=INTEGER}, #{operateType,jdbcType=TINYINT}, 
+      #{operateApplicatoin,jdbcType=TINYINT}, #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="operate_log_id" keyProperty="operateLogId" parameterType="com.juma.vms.operateLog.domain.OperateLog" useGeneratedKeys="true">
+    insert into operate_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="logSign != null">
+        log_sign,
+      </if>
+      <if test="relationTableId != null">
+        relation_table_id,
+      </if>
+      <if test="operateType != null">
+        operate_type,
+      </if>
+      <if test="operateApplicatoin != null">
+        operate_applicatoin,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="logSign != null">
+        #{logSign,jdbcType=TINYINT},
+      </if>
+      <if test="relationTableId != null">
+        #{relationTableId,jdbcType=INTEGER},
+      </if>
+      <if test="operateType != null">
+        #{operateType,jdbcType=TINYINT},
+      </if>
+      <if test="operateApplicatoin != null">
+        #{operateApplicatoin,jdbcType=TINYINT},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.vms.operateLog.domain.OperateLogExample" resultType="java.lang.Long">
+    select count(*) from operate_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update operate_log
+    <set>
+      <if test="record.operateLogId != null">
+        operate_log_id = #{record.operateLogId,jdbcType=INTEGER},
+      </if>
+      <if test="record.logSign != null">
+        log_sign = #{record.logSign,jdbcType=TINYINT},
+      </if>
+      <if test="record.relationTableId != null">
+        relation_table_id = #{record.relationTableId,jdbcType=INTEGER},
+      </if>
+      <if test="record.operateType != null">
+        operate_type = #{record.operateType,jdbcType=TINYINT},
+      </if>
+      <if test="record.operateApplicatoin != null">
+        operate_applicatoin = #{record.operateApplicatoin,jdbcType=TINYINT},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update operate_log
+    set operate_log_id = #{record.operateLogId,jdbcType=INTEGER},
+      log_sign = #{record.logSign,jdbcType=TINYINT},
+      relation_table_id = #{record.relationTableId,jdbcType=INTEGER},
+      operate_type = #{record.operateType,jdbcType=TINYINT},
+      operate_applicatoin = #{record.operateApplicatoin,jdbcType=TINYINT},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.vms.operateLog.domain.OperateLog">
+    update operate_log
+    <set>
+      <if test="logSign != null">
+        log_sign = #{logSign,jdbcType=TINYINT},
+      </if>
+      <if test="relationTableId != null">
+        relation_table_id = #{relationTableId,jdbcType=INTEGER},
+      </if>
+      <if test="operateType != null">
+        operate_type = #{operateType,jdbcType=TINYINT},
+      </if>
+      <if test="operateApplicatoin != null">
+        operate_applicatoin = #{operateApplicatoin,jdbcType=TINYINT},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where operate_log_id = #{operateLogId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.vms.operateLog.domain.OperateLog">
+    update operate_log
+    set log_sign = #{logSign,jdbcType=TINYINT},
+      relation_table_id = #{relationTableId,jdbcType=INTEGER},
+      operate_type = #{operateType,jdbcType=TINYINT},
+      operate_applicatoin = #{operateApplicatoin,jdbcType=TINYINT},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    where operate_log_id = #{operateLogId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="operateLogId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into operate_log
+    (log_sign,relation_table_id,operate_type,operate_applicatoin,create_user_id,create_time,remark) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.logSign},#{item.relationTableId},#{item.operateType},#{item.operateApplicatoin},#{item.createUserId},#{item.createTime},#{item.remark})
+    </foreach>
+  </insert>
+  <update id="updateBatch" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update operate_log
+      <set>
+        operate_log_id = #{item.operateLogId},
+        log_sign = #{item.logSign},
+        relation_table_id = #{item.relationTableId},
+        operate_type = #{item.operateType},
+        operate_applicatoin = #{item.operateApplicatoin},
+        create_user_id = #{item.createUserId},
+        create_time = #{item.createTime},
+        remark = #{item.remark},
+      </set>
+      where operate_log_id = #{item.operateLogId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update operate_log
+      <set>
+        <if test="item.logSign != null">
+          log_sign = #{item.logSign,jdbcType=TINYINT},
+        </if>
+        <if test="item.relationTableId != null">
+          relation_table_id = #{item.relationTableId,jdbcType=INTEGER},
+        </if>
+        <if test="item.operateType != null">
+          operate_type = #{item.operateType,jdbcType=TINYINT},
+        </if>
+        <if test="item.operateApplicatoin != null">
+          operate_applicatoin = #{item.operateApplicatoin,jdbcType=TINYINT},
+        </if>
+        <if test="item.createUserId != null">
+          create_user_id = #{item.createUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.createTime != null">
+          create_time = #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.remark != null">
+          remark = #{item.remark,jdbcType=VARCHAR},
+        </if>
+      </set>
+      where operate_log_id = #{item.operateLogId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

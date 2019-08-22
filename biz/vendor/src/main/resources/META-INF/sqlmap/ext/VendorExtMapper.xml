@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.vms.vendor.dao.ext.VendorExtMapper" >
+  <sql id="Base_Column_List" >
+    v.vendor_id as vendorId,
+    v.user_id as userId,
+    v.vendor_name as vendorName,
+    v.serial_no as serialNo,
+    v.contact_user_name as contactUserName,
+    v.contact_phone as contactPhone,
+    v.id_card_no as idCardNo,
+    v.id_card_no_expire_time as idCardNoExpireTime,
+    v.tax_no as taxNo,
+    v.source as source,
+    v.vendor_source as vendorSource,
+    v.bank_of_deposit as bankOfDeposit,
+    v.bank_account as bankAccount,
+    v.enterprise_code as enterpriseCode,
+    v.skill_license_expire_time as skillLicenseExpireTime,
+    v.id_card_img_1 as idCardImg1,
+    v.id_card_img_2 as idCardImg2,
+    v.quality_cert_img_1 as qualityCertImg1,
+    v.quality_cert_img_2 as qualityCertImg2,
+    v.road_trans_permit_img_1 as roadTransPermitImg1,
+    v.road_trans_permit_img_2 as roadTransPermitImg2,
+    v.business_license_img_1 as businessLicenseImg1,
+    v.business_license_img_2 as businessLicenseImg2,
+    v.vendor_address as vendorAddress,
+    v.vendor_type as vendorType,
+    v.is_show_your_price as isShowYourPrice,
+    v.is_sync_as_driver as isSyncAsDriver,
+    v.is_sync_as_vendor as isSyncAsVendor,
+    v.is_open as isOpen,
+    v.is_delete as isDelete,
+    vt.vendor_tenant_id as vendorTenantId,
+    vt.tenant_id as tenantId,
+    vt.customer_id as customerId,
+    vt.area_code as areaCode,
+    vt.is_owner as isOwner,
+    vt.is_enable as isEnable
+  </sql>
+  
+  <sql id="Base_vendor_vehicle_Column_List" >
+    v.`vendor_vehicle_id`,
+    v.`vendor_id`,
+    v.`vehicle_id`,
+    v.`tenant_id`,
+    v.`create_time`,
+    v.`create_user_id`,
+    v.`last_update_time`,
+    v.`last_update_user_id` 
+  </sql>
+
+  <sql id="SEARCH_WHERE_SQL">
+    <where>
+      <if test="filters != null">
+        <if test="filters.vendorId != null"><![CDATA[ and vt.vendor_id = #{filters.vendorId} ]]></if>
+        <if test="filters.tenantId != null"><![CDATA[ and vt.tenant_id = #{filters.tenantId} ]]></if>
+        <if test="filters.vendorName != null"><![CDATA[ and v.vendor_name like concat('%', #{filters.vendorName}, '%') ]]></if>
+        <if test="filters.serialNo != null"><![CDATA[ and v.serial_no like concat(#{filters.serialNo}, '%') ]]></if>
+        <if test="filters.vendorType != null"><![CDATA[ and v.vendor_type = #{filters.vendorType} ]]></if>
+        <if test="filters.vendorSource != null"><![CDATA[ and v.vendor_source = #{filters.vendorSource} ]]></if>
+        <if test="filters.contactUserName != null"><![CDATA[ and v.contact_user_name like concat('%', #{filters.contactUserName}, '%') ]]></if>
+        <if test="filters.contactPhone != null"><![CDATA[ and v.contact_phone like concat('%', #{filters.contactPhone}, '%') ]]></if>
+        <if test="filters.idCardNo != null"><![CDATA[ and v.id_card_no like concat('%', #{filters.idCardNo}, '%') ]]></if>
+        <if test="filters.enterpriseCode != null"><![CDATA[ and v.enterprise_code like concat('%', #{filters.enterprise_code}, '%') ]]></if>
+        <if test="filters.credentialNo != null"><![CDATA[ and (v.id_card_no like concat('%', #{filters.credentialNo}, '%') or v.enterprise_code like concat('%', #{filters.credentialNo}, '%')) ]]></if>
+        <if test="filters.vendorNameOrPhone != null"><![CDATA[ and (v.vendor_name like concat('%', #{filters.vendorNameOrPhone}, '%') or v.contact_phone like concat('%', #{filters.vendorNameOrPhone}, '%')) ]]></if>
+        <if test="filters.areaCodeList != null and !filters.areaCodeList.isEmpty">
+            <![CDATA[ AND ]]>
+            <foreach collection="filters.areaCodeList" item="code" open="(" separator=" or" close=")">
+                vt.area_code like concat(#{code},'%')
+            </foreach>
+        </if>
+        <if test="filters.isDelete != null"><![CDATA[ and v.is_delete = #{filters.isDelete} ]]></if>
+        <if test="filters.isEnable != null"><![CDATA[ and vt.is_enable = #{filters.isEnable} ]]></if>
+        <if test="filters.isOpen != null"><![CDATA[ and v.is_open = #{filters.isOpen} ]]></if>
+        <if test="filters.isOwner != null"><![CDATA[ and vt.is_owner = #{filters.isOwner} ]]></if>
+      </if>
+    </where>
+  </sql>
+
+  <sql id="searchorderByAndLimitSql">
+    <choose>
+        <when test="orderBy == null">
+            order by vt.create_time desc
+        </when>
+        <otherwise>
+            order by ${orderBy} ${orderSort}
+        </otherwise>
+    </choose>
+    limit #{startOffset}, #{pageSize}
+  </sql>
+
+  <select id="search" parameterType="com.juma.vms.common.query.QueryCond" resultType="com.juma.vms.vendor.vo.VendorQuery">
+    <![CDATA[ select ]]>
+    <include refid="Base_Column_List"></include>
+    <![CDATA[ from vendor v left join vendor_tenant vt on v.vendor_id = vt.vendor_id ]]>
+    <include refid="SEARCH_WHERE_SQL"></include>
+    <![CDATA[ GROUP BY v.vendor_id ]]>
+    <include refid="searchorderByAndLimitSql"></include>
+  </select>
+
+  <select id="searchCount" resultType="java.lang.Integer" parameterType="com.juma.vms.common.query.QueryCond">
+    <![CDATA[ select count(1) from (select count(1) from vendor v left join vendor_tenant vt on v.vendor_id = vt.vendor_id ]]>
+    <include refid="SEARCH_WHERE_SQL" />
+    <![CDATA[ GROUP BY v.vendor_id) vvt ]]>
+  </select>
+
+  <select id="listVendorVehicleBy" parameterType="com.juma.vms.vendor.domain.VendorTenant" resultType="com.juma.vms.vendor.domain.VendorVehicle">
+    <![CDATA[ select ]]>
+    <include refid="Base_vendor_vehicle_Column_List"></include>
+    <![CDATA[ FROM `vendor_vehicle` v  LEFT JOIN `vendor_tenant` t  ON t.`vendor_id` = v.`vendor_id` ]]>
+    <where>
+       <![CDATA[ AND t.`vendor_id` = #{vendorId}
+                 AND t.`tenant_id` = #{tenantId} ]]>
+       <if test="areaCode != null"><![CDATA[ AND t.`area_code` like concat(#{areaCode}, '%') ]]></if>
+    </where>
+  </select>
+</mapper>

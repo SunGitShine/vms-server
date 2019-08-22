@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://code.alibabatech.com/schema/dubbo
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+ 
+    <dubbo:application name="vms-server"  />
+ 
+    <dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}" />
+    
+    <dubbo:protocol name="dubbo" port="${dubbo.service.port}" />
+    
+    <dubbo:provider timeout="10000" retries="0" version="${dubbo.provider.vms.version}"/>
+
+    <dubbo:service interface="com.juma.vms.vendor.service.VendorService" ref="vendorServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.vendor.service.VendorTenantService" ref="vendorTenantServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.vendor.service.VendorVehicleService" ref="vendorVehicleServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.operateLog.service.OperateLogService" ref="operateLogServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.tool.service.AmsCommonService" ref="amsCommonServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.tool.service.CrmCommonService" ref="crmCommonServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.tool.service.MdcCommonService" ref="mdcCommonServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.mq.service.MqService" ref="mqServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.driver.service.DriverService" ref="driverServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.driver.service.DriverTenantService" ref="driverTenantServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.truck.service.TruckService" ref="truckServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.transport.service.TransportService" ref="transportServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.transport.service.TransportReceiveService" ref="transportReceiveServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.transport.service.TransportSendService" ref="transportSendServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.transport.service.TransportTruckReturnService" ref="transportTruckReturnServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.vendor.service.VendorTruckService" ref="vendorTruckServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.vendor.service.VendorDriverService" ref="vendorDriverServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.tool.service.BusinessAreaCommonService" ref="businessAreaCommonServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.tool.service.MessageService" ref="messageServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.transport.service.CapacityPoolService" ref="capacityPoolServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.tool.service.OcrCommonService" ref="ocrCommonServiceImpl"/>
+    <dubbo:service interface="com.juma.vms.tool.service.AuthCommonService" ref="authCommonServiceImpl"/>
+    
+    <dubbo:service interface="com.juma.vms.tool.service.IdGeneratorService" ref="idGeneratorServiceImpl"/>
+
+	<!-- 初始化数据使用  后续去掉 4月25日上线 -->
+	<dubbo:service interface="com.juma.vms.transport.service.InitService" ref="initServiceImpl" timeout="2500000"/>
+    <!-- VMS对外接口 -->
+    <dubbo:service interface="com.juma.vms.external.service.VmsService" ref="vmsServiceImpl"/>
+</beans>

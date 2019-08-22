@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+        "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<module name = "Checker">
+    <!-- 全局设置 -->
+    <!--
+    <property name="charset" value="UTF-8"/>
+    <property name="severity" value="warning"/>
+    <property name="localeCountry" value="ZH"/>
+    <property name="localeLanguage" value="zh"/>
+    <property name="fileExtensions" value="java"/>
+    -->
+    <module name="TreeWalker">
+
+        <!-- 无效的规则 -->
+        <!-- 缺少Override的检查 : 经过测试, 此校验规则无效-->
+        <module name="MissingOverride"/>
+        <!-- 检查类名接口名是否符合格式 -->
+        <module name="TypeName">
+            <property name="severity" value="error"/>
+            <message key="name.invalidPattern" value="名称 ''{0}'' 要符合 ''{1}''格式."/>
+        </module>
+
+        <!-- 有效的规则 -->
+        <!-- 常量命名规则 -->
+        <module name="ConstantName"/>
+        <!-- 抽象类命名规则 -->
+        <module name="AbstractClassName"/>
+        <!-- 普通类泛型命名规则 -->
+        <module name="ClassTypeParameterName"/>
+        <!-- 接口泛型命名规则 -->
+        <module name="InterfaceTypeParameterName"/>
+
+        <!-- 局部final变量命名规则 -->
+        <module name="LocalFinalVariableName"/>
+        <!-- 局部变量命名规则 -->
+        <module name="LocalVariableName">
+            <property name="format" value="^(id)|([a-z][a-z0-9][a-zA-Z0-9]+)$"/>
+            <property name="allowOneCharVarInForLoop" value="true"/>
+        </module>
+        <!-- 成员变量命名规则 -->
+        <module name="MemberName">
+            <property name="format" value="^(id)|([a-z][a-z0-9][a-zA-Z0-9]+)$"/>
+        </module>
+        <!-- 方法命名规则 -->
+        <module name="MethodName"/>
+        <!-- 方法参数命名规则 -->
+        <module name="MethodTypeParameterName"/>
+        <!-- 包路径命名规则 -->
+        <module name="PackageName"/>
+        <!-- 方法参数命名规则 -->
+        <module name="ParameterName">
+            <property name="format" value="^(id)|([a-z][a-z0-9][a-zA-Z0-9]+)$"/>
+            <property name="ignoreOverridden" value="true"/>
+        </module>
+        <!-- 静态变量命名规则 -->
+        <module name="StaticVariableName">
+            <property name="format" value="^(id)|([a-z][a-z0-9][a-zA-Z0-9]+)$"/>
+        </module>
+        <!-- 检查特定的类是否被用作声明、返回值或参数 -->
+        <module name="IllegalType">
+            <property name="illegalClassNames"
+                      value="java.util.HashSet, HashSet, java.util.LinkedHashMap, LinkedHashMap,
+                       java.util.TreeMap, TreeMap, java.util.HashMap, HashMap,
+                       java.util.LinkedHashSet, LinkedHashSet, java.util.TreeSet, TreeSet,
+                       java.lang.StringBuffer, StringBuffer"/>
+        </module>
+
+        <!-- 检查子表达式是否有赋值操作，例如string s = Integer.toString(i = 2); -->
+        <module name="InnerAssignment"/>
+
+        <!-- 魔法值检查 -->
+        <module name="MagicNumber">
+            <property name="severity" value="warning"/>
+            <property name="ignoreNumbers" value="-1, -1, 0, 1, 2"/>
+            <property name="ignoreAnnotation" value="true"/>
+        </module>
+
+        <!-- 缺少switch default -->
+        <module name="MissingSwitchDefault">
+        </module>
+
+        <!-- 检查确保for循环里没有修改循环控制变量 -->
+        <module name="ModifiedControlVariable"/>
+
+        <!-- 检查代码段和行中是否有多次变量声明 -->
+        <module name="MultipleVariableDeclarations"/>
+
+        <!-- 限制块嵌套为指定深度以内 -->
+        <module name="NestedForDepth">
+            <property name="max" value="2"/>
+        </module>
+        <!-- 限制if else块为指定深度 -->
+        <module name="NestedIfDepth">
+            <property name="max" value="3"/>
+        </module>
+
+        <!-- 限制try-catch-finally 块深度为指定深度内 -->
+        <module name="NestedTryDepth">
+            <property name="max" value="3"/>
+        </module>
+
+        <!-- 检查字符串是否使用了 ==或 ！= -->
+        <module name="StringLiteralEquality"/>
+
+        <!-- 检查语句d或表达式中是否使用了不必要的括号 -->
+        <module name="UnnecessaryParentheses">
+            <property name="severity" value="warning"/>
+        </module>
+
+        <!-- 检查声明变量与其第一次用的距离 -->
+        <module name="VariableDeclarationUsageDistance">
+            <property name="severity" value="warning"/>
+        </module>
+
+        <!-- 检查多余的导入 -->
+        <module name="RedundantImport">
+            <property name="severity" value="warning"/>
+        </module>
+
+        <!-- 检查未使用的import 语句 -->
+        <module name="UnusedImports">
+            <property name="severity" value="warning"/>
+        </module>
+
+        <!-- 限制布尔运算符的复杂度（&& 、 ||等） -->
+        <module name="BooleanExpressionComplexity">
+            <property name="severity" value="warning"/>
+            <property name="max" value="7"/>
+        </module>
+
+        <!-- 检查数组定义的样式，例如C和java会不同 -->
+        <module name="ArrayTypeStyle">
+            <property name="severity" value="warning"/>
+        </module>
+
+        <!-- 检查每行代码长度 -->
+        <module name="LineLength">
+            <property name="max" value="100"/>
+            <property name="ignorePattern" value="^ *\* *([^ ]+|\{@code .*|&lt;a href.*)$"/>
+        </module>
+        <!-- 检查方法代码行数 -->
+        <module name="MethodLength">
+            <property name="tokens" value="METHOD_DEF" />
+            <property name="max" value="50" />
+        </module>
+    </module>
+</module>

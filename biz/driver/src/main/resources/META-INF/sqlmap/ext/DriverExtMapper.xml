@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.juma.vms.driver.dao.ext.DriverExtMapper" >
+
+  <sql id="Base_Column_List" >
+    d.driver_id driverId,
+    d.juma_pin jumaPin,
+    dt.area_code areaCode,
+    d.name,
+    d.sex,
+    d.icon,
+    d.id_card_no idCardNo,
+    d.id_card_img_1 idCardImg1,
+    d.id_card_img_2 idCardImg2,
+    d.phone,
+    d.emergency_contact_phone emergencyContactPhone,
+    dt.status status,
+    dt.tenant_id tenantId,
+    d.can_drive_type canDriveType,
+    d.driver_run_type driverRunType,
+    d.drive_license_img_1 driveLicenseImg1,
+    d.drive_license_img_2 driveLicenseImg2,
+    d.drive_license_first_take_time driveLicenseFirstTakeTime,
+    d.drive_license_start_time driveLicenseStartTime,
+    d.drive_license_end_time driveLicenseEndTime,
+    d.create_user_id createUserId,
+    d.create_time createTime,
+    d.last_update_user_id lastUpdateUserId,
+    d.last_update_time lastUpdateTime,
+    vd.vendor_id vendorId
+  </sql>
+
+  <sql id="Filter_Column_List" >
+    d.driver_id,
+    d.juma_pin,
+    d.user_id,
+    d.ams_driver_id,
+    d.name,
+    d.sex,
+    d.icon,
+    d.id_card_no,
+    d.id_card_img_1,
+    d.id_card_img_2,
+    d.phone,
+    d.emergency_contact_phone,
+    d.can_drive_type,
+    d.driver_run_type,
+    d.drive_license_img_1,
+    d.drive_license_img_2,
+    d.drive_license_first_take_time,
+    d.drive_license_start_time,
+    d.drive_license_end_time,
+    d.tel_remind_switch,
+    d.sms_remind_switch,
+    d.is_receive_waybill,
+    d.create_user_id,
+    d.create_time,
+    d.last_update_user_id,
+    d.last_update_time
+  </sql>
+
+  <sql id="Base_Filter_Column_List" >
+    d.driver_id,d.name,d.phone,d.driver_run_type,d.sex,d.id_card_no,d.can_drive_type
+  </sql>
+
+  <sql id="SEARCH_WHERE_SQL">
+    <where>
+      <if test="filters != null">
+        <if test="filters.areaCodeList != null and !filters.areaCodeList.isEmpty">
+          <![CDATA[ AND ]]>
+          <foreach collection="filters.areaCodeList" item="code" open="(" separator=" or" close=")">
+            dt.area_code like concat(#{code},'%')
+          </foreach>
+        </if>
+        <if test="filters.tenantId != null"><![CDATA[ and dt.tenant_id = #{filters.tenantId} ]]></if>
+        <if test="filters.driverId != null"><![CDATA[ and d.driver_id = #{filters.driverId} ]]></if>
+        <if test="filters.idCardNo != null"><![CDATA[ and d.id_card_no = #{filters.idCardNo} ]]></if>
+        <if test="filters.phone != null"><![CDATA[ and d.phone like concat('%', #{filters.phone}, '%') ]]></if>
+        <if test="filters.name != null"><![CDATA[ and d.name like concat('%', #{filters.name}, '%') ]]></if>
+        <if test="filters.vendorId != null"><![CDATA[ and vd.vendor_id = #{filters.vendorId} ]]></if>
+        <if test="filters.driverRunType != null"><![CDATA[ and d.driver_run_type = #{filters.driverRunType} ]]></if>
+        <if test="filters.nameOrPhone != null"><![CDATA[ and (d.name like concat('%', #{filters.nameOrPhone}, '%') or d.phone like concat('%', #{filters.nameOrPhone}, '%')) ]]></if>
+        <if test="filters.status != null"><![CDATA[ and dt.status = #{filters.status} ]]></if>
+        <if test="filters.isOwner != null"><![CDATA[ and dt.is_owner = #{filters.isOwner} ]]></if>
+      </if>
+    </where>
+  </sql>
+
+  <sql id="searchorderByAndLimitSql">
+    <choose>
+      <when test="orderBy == null">
+        order by dt.driver_tenant_id desc
+      </when>
+      <otherwise>
+        order by ${orderBy} ${orderSort}
+      </otherwise>
+    </choose>
+    limit #{startOffset}, #{pageSize}
+  </sql>
+
+  <select id="search" parameterType="com.juma.vms.common.query.QueryCond" resultType="com.juma.vms.driver.vo.DriverQuery">
+    SELECT
+    <include refid="Base_Column_List"></include>
+    FROM driver d
+    LEFT JOIN driver_tenant dt ON d.driver_id = dt.driver_id
+    LEFT JOIN vendor_driver vd ON d.driver_id = vd.driver_id AND dt.tenant_id = vd.tenant_id
+    <include refid="SEARCH_WHERE_SQL"></include>
+    GROUP BY d.driver_id
+    <include refid="searchorderByAndLimitSql"></include>
+  </select>
+
+  <select id="searchCount" resultType="java.lang.Integer" parameterType="com.juma.vms.common.query.QueryCond">
+    SELECT count(1) FROM
+    (SELECT count(1) FROM driver d
+    LEFT JOIN driver_tenant dt ON d.driver_id = dt.driver_id
+    LEFT JOIN vendor_driver vd ON d.driver_id = vd.driver_id AND dt.tenant_id = vd.tenant_id
+    <include refid="SEARCH_WHERE_SQL" />
+    GROUP BY d.driver_id) a
+  </select>
+
+  <select id="listByDriverFilter" resultType="com.juma.vms.driver.vo.DriverQuery" parameterType="com.juma.vms.driver.vo.DriverQuery">
+    SELECT <include refid="Filter_Column_List"/> FROM driver d
+    LEFT JOIN driver_tenant dt ON d.driver_id = dt.driver_id
+    LEFT JOIN vendor_driver vd ON d.driver_id = vd.driver_id AND dt.tenant_id = vd.tenant_id
+    WHERE dt.`status` = 1
+    <if test="nameOrPhone != null and nameOrPhone != ''"><![CDATA[
+    AND (d.`name` like concat('%', #{nameOrPhone}, '%') or d.phone like concat('%', #{nameOrPhone}, '%')) ]]></if>
+    AND vd.tenant_id = #{tenantId}
+    AND vd.vendor_id = #{vendorId}
+    LIMIT 0, 15
+  </select>
+
+  <select id="listByDriverVendorFilter" resultType="com.juma.vms.driver.vo.DriverQuery" parameterType="com.juma.vms.driver.vo.DriverQuery">
+    SELECT b.* FROM(
+    SELECT e.* FROM(SELECT <include refid="Base_Filter_Column_List"/> FROM driver d
+    LEFT JOIN driver_tenant dt ON d.driver_id = dt.driver_id
+    LEFT JOIN vendor_driver vd ON d.driver_id = vd.driver_id AND dt.tenant_id = vd.tenant_id
+    WHERE dt.`status` = 1
+    <if test="nameOrPhone != null and nameOrPhone != ''"><![CDATA[
+    AND (d.`name` like concat('%', #{nameOrPhone}, '%') or d.phone like concat('%', #{nameOrPhone}, '%')) ]]></if>
+    AND vd.tenant_id = #{tenantId}
+    AND vd.vendor_id = #{vendorId})e WHERE NOT EXISTS
+    (SELECT c.driver_id FROM capacity_pool c WHERE c.tenant_id = #{tenantId} AND c.vendor_id = #{vendorId} AND c.is_delete = 0 AND c.driver_id is not null AND e.driver_id = c.driver_id)
+    UNION ALL
+    SELECT <include refid="Base_Filter_Column_List"/> FROM driver d
+    LEFT JOIN driver_tenant dt ON d.driver_id = dt.driver_id
+    WHERE dt.`status` = 1
+    <if test="nameOrPhone != null and nameOrPhone != ''"><![CDATA[
+    AND (d.`name` like concat('%', #{nameOrPhone}, '%') or d.phone like concat('%', #{nameOrPhone}, '%')) ]]></if>
+    AND dt.tenant_id = #{tenantId}
+    AND d.driver_id NOT IN ( SELECT a.driver_id FROM vendor_driver a WHERE a.tenant_id = #{tenantId} AND a.driver_id is not null)) b
+    LIMIT 0, 15
+  </select>
+
+  <select id="listByDriverAreaFilter" resultType="com.juma.vms.driver.vo.DriverQuery" parameterType="com.juma.vms.driver.vo.DriverQuery">
+    SELECT <include refid="Filter_Column_List"/> FROM driver d
+    LEFT JOIN driver_tenant dt ON d.driver_id = dt.driver_id
+    WHERE
+    dt.`status` = 1
+    <if test="nameOrPhone != null and nameOrPhone != ''"><![CDATA[
+    AND (d.`name` like concat('%', #{nameOrPhone}, '%') or d.phone like concat('%', #{nameOrPhone}, '%')) ]]></if>
+    AND dt.tenant_id = #{tenantId}
+    <if test="areaCodeList != null and !areaCodeList.isEmpty">
+      <![CDATA[ AND ]]>
+      <foreach collection="areaCodeList" item="code" open="(" separator=" or" close=")">
+        dt.area_code like concat(#{code},'%')
+      </foreach>
+    </if>
+    LIMIT 0, 15
+  </select>
+
+  <select id="listEffectiveCapacityDriver" parameterType="com.juma.vms.transport.request.CapacityPoolFilter" resultType="com.juma.vms.driver.domain.Driver">
+    select
+    d.driver_id as driverId,
+    d.user_id as userId,
+    d.name as name,
+    d.phone as phone,
+    d.tel_remind_switch as telRemindSwitch,
+    d.sms_remind_switch as smsRemindSwitch,
+    d.is_receive_waybill as isReceiveWaybill
+    from driver d left join capacity_pool c on d.driver_id = c.driver_id
+    left join driver_tenant t on d.driver_id = t.driver_id
+    <where>
+      <if test="tenantId != null"> and c.tenant_id = #{tenantId}</if>
+      <if test="vehicleBoxType != null"> and c.vehicle_box_type = #{vehicleBoxType}</if>
+      <if test="vehicleBoxLength != null"> and c.vehicle_box_length = #{vehicleBoxLength}</if>
+      <if test="goCityLicenseType != null"> and c.go_city_license_type = #{goCityLicenseType}</if>
+      <if test="vehicleRunType != null"> and c.vehicle_run_type = #{vehicleRunType}</if>
+      <if test="areaCodeList != null and !areaCodeList.isEmpty">
+        and
+        <foreach collection="areaCodeList" item="areaCode" open="(" separator="or" close=")">
+          t.area_code like concat(#{areaCode}, '%')
+        </foreach>
+      </if>
+      <if test="status != null"> and c.status = #{status}</if>
+      <if test="isDelete != null"> and c.is_delete = #{isDelete}</if>
+
+    </where>
+
+  </select>
+
+</mapper>

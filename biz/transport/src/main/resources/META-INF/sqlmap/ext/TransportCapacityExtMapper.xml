@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.vms.transport.dao.ext.TransportCapacityExtMapper">
+  <resultMap id="BaseResultMap" type="com.juma.vms.transport.domain.TransportCapacity">
+    <id column="transport_id" jdbcType="INTEGER" property="transportId" />
+    <result column="tenant_id" jdbcType="INTEGER" property="tenantId" />
+    <result column="tenant_code" jdbcType="VARCHAR" property="tenantCode" />
+    <result column="receive_tenant_id" jdbcType="INTEGER" property="receiveTenantId" />
+    <result column="receive_tenant_code" jdbcType="VARCHAR" property="receiveTenantCode" />
+    <result column="transport_no" jdbcType="VARCHAR" property="transportNo" />
+    <result column="transport_type" jdbcType="INTEGER" property="transportType" />
+    <result column="from_department_id" jdbcType="INTEGER" property="fromDepartmentId" />
+    <result column="from_department_code" jdbcType="VARCHAR" property="fromDepartmentCode" />
+    <result column="to_department_id" jdbcType="INTEGER" property="toDepartmentId" />
+    <result column="to_department_code" jdbcType="VARCHAR" property="toDepartmentCode" />
+    <result column="process_instance_id" jdbcType="VARCHAR" property="processInstanceId" />
+    <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
+    <result column="submit_user_id" jdbcType="INTEGER" property="submitUserId" />
+    <result column="submit_time" jdbcType="TIMESTAMP" property="submitTime" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ta.transport_id, tenant_id, tenant_code, receive_tenant_id, receive_tenant_code, transport_no,
+    transport_type, from_department_id, from_department_code, to_department_id, to_department_code,
+    process_instance_id, approval_status, submit_user_id, submit_time, ta.create_user_id,
+    ta.create_time, ta.last_update_time, ta.last_update_user_id
+  </sql>
+
+  <sql id="SEARCH_JOIN_WHERE_CLAUSE">
+    <where>
+      <if test="filters.tenantId != null"><![CDATA[AND ta.tenant_id = #{filters.tenantId}]]></if>
+      <if test="filters.startTime != null"><![CDATA[AND ta.create_time >= #{filters.startTime}]]></if>
+      <if test="filters.endTime != null"><![CDATA[AND ta.create_time <= #{filters.endTime}]]></if>
+      <if test="filters.transportNo != null"><![CDATA[AND ta.transport_no = #{filters.transportNo}]]></if>
+      <if test="filters.plateNumber != null"><![CDATA[AND tai.plate_number = #{filters.plateNumber}]]></if>
+      <if test="filters.fromCompany != null"><![CDATA[AND ta.from_department_id = #{filters.fromCompany}]]></if>
+      <if test="filters.toCompany != null"><![CDATA[AND ta.to_department_id = #{filters.toCompany}]]></if>
+      <if test="filters.approvalStatusList != null and !filters.approvalStatusList.isEmpty">
+        and ta.approval_status in
+        <foreach collection="filters.approvalStatusList" item="status" open="(" close=")" separator=",">
+          #{status}
+        </foreach>
+      </if>
+    </where>
+  </sql>
+
+  <select id="findCapacityPoolPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    FROM transport_capacity ta
+    LEFT JOIN transport_capacity_item tai
+    ON ta.transport_id = tai.transport_id
+    <include refid="SEARCH_JOIN_WHERE_CLAUSE"/>
+    GROUP BY ta.transport_id
+    ORDER BY ta.create_time DESC
+    <if test="startOffset != null and startOffset>=0">
+      limit ${startOffset} , ${pageSize}
+    </if>
+
+  </select>
+  <select id="findCapacityPoolPageCount" resultType="java.lang.Integer">
+    SELECT COUNT(1) FROM (
+      select COUNT(1)
+      FROM transport_capacity ta
+      LEFT JOIN transport_capacity_item tai
+      ON ta.transport_id = tai.transport_id
+      <include refid="SEARCH_JOIN_WHERE_CLAUSE"/>
+      GROUP BY ta.transport_id
+    ) AS tac
+  </select>
+</mapper>

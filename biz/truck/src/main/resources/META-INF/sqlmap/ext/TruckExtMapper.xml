@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.vms.truck.dao.TruckExtMapper">
+
+  <select id="findByPlateNumberAndIdentificationNo" resultType="int">
+    SELECT COUNT(1) FROM truck t
+    LEFT JOIN truck_tenant tt
+    ON t.truck_id = tt.truck_id
+    WHERE
+    t.plate_number = #{plateNumber,jdbcType=VARCHAR}
+    AND truck_identification_no = #{truckIdentificationNo,jdbcType=VARCHAR}
+    AND tt.tenant_id = #{tenantId,jdbcType=INTEGER}
+  </select>
+
+  <sql id="Base_Column_List" >
+    t.truck_id truckId,
+    t.vehicle_id vehicleId,
+    t.plate_number plateNumber,
+    t.truck_identification_no truckIdentificationNo,
+    t.license_type licenseType,
+    t.license_certificate_img_1 licenseCertificateImg1,
+    t.license_certificate_img_2 licenseCertificateImg2,
+    t.permit_license_img_1 permitLicenseImg1,
+    t.permit_license_img_2 permitLicenseImg2,
+    t.vehicle_box_type vehicleBoxType,
+    t.vehicle_box_length vehicleBoxLength,
+    t.truck_run_type truckRunType,
+    t.energy_type energyType,
+    t.energy_out_type energyOutType,
+    t.go_city_license_type goCityLicenseType,
+    t.truck_body_img truckBodyImg,
+    t.is_tail_board isTailBoard,
+    tt.status status,
+    t.create_time createTime,
+    t.create_user_id createUserId,
+    t.last_update_time lastUpdateTime,
+    t.last_update_user_id lastUpdateUserId,
+    tt.area_code areaCode,
+    tt.is_owner isOwner,
+    tt.tenant_id tenantId,
+    tt.tenant_code tenantCode,
+    c.vendor_id vendorId,
+    c.driver_id driverId,
+    tt.truck_belong_to_company truckBelongToCompany
+  </sql>
+
+  <sql id="Filter_Column_List">
+    t.truck_id,
+    t.vehicle_id,
+    t.plate_number,
+    t.truck_identification_no,
+    t.license_type,
+    t.license_certificate_img_1,
+    t.license_certificate_img_2,
+    t.permit_license_img_1,
+    t.permit_license_img_2,
+    t.vehicle_box_type,
+    t.vehicle_box_length,
+    t.truck_run_type,
+    t.energy_type,
+    t.energy_out_type,
+    t.go_city_license_type,
+    t.truck_body_img,
+    t.is_tail_board,
+    t.create_time,
+    t.create_user_id,
+    t.last_update_time,
+    t.last_update_user_id
+  </sql>
+
+  <sql id="SEARCH_WHERE_SQL">
+    <where>
+      <if test="filters != null">
+        <if test="filters.areaCodeList != null and !filters.areaCodeList.isEmpty">
+          <![CDATA[ AND ]]>
+          <foreach collection="filters.areaCodeList" item="code" open="(" separator=" or" close=")">
+            tt.area_code like concat(#{code},'%')
+          </foreach>
+        </if>
+        <if test="filters.tenantId != null"><![CDATA[ and tt.tenant_id = #{filters.tenantId} ]]></if>
+        <if test="filters.plateNumber != null"><![CDATA[ and t.plate_number like concat('%', #{filters.plateNumber}, '%') ]]></if>
+        <if test="filters.truckIdentificationNo != null"><![CDATA[ and t.truck_identification_no like concat('%', #{filters.truckIdentificationNo}, '%') ]]></if>
+        <if test="filters.vehicleBoxType != null and filters.vehicleBoxLength != null"><![CDATA[ and (t.vehicle_box_type = #{filters.vehicleBoxType} and t.vehicle_box_length = #{filters.vehicleBoxLength}) ]]></if>
+        <if test="filters.vendorId != null"><![CDATA[ and c.vendor_id = #{filters.vendorId} ]]></if>
+        <if test="filters.driverId != null"><![CDATA[ and c.driver_id = #{filters.driverId} ]]></if>
+        <if test="filters.truckRunType != null"><![CDATA[ and t.truck_run_type = #{filters.truckRunType} ]]></if>
+        <if test="filters.truckBelongToCompany != null"><![CDATA[ and tt.truck_belong_to_company = #{filters.truckBelongToCompany} ]]></if>
+        <if test="filters.status != null"><![CDATA[ and tt.status = #{filters.status} ]]></if>
+        <if test="filters.isOwner != null"><![CDATA[ and tt.is_owner = #{filters.isOwner} ]]></if>
+        <if test="filters.startTime != null"><![CDATA[ and t.create_time >= #{filters.startTime} ]]></if>
+        <if test="filters.endTime != null"><![CDATA[ and t.create_time <= #{filters.endTime} ]]></if>
+      </if>
+    </where>
+  </sql>
+
+  <sql id="searchorderByAndLimitSql">
+    <choose>
+      <when test="orderBy == null">
+        order by tt.truck_tenant_id desc
+      </when>
+      <otherwise>
+        order by ${orderBy} ${orderSort}
+      </otherwise>
+    </choose>
+    limit #{startOffset}, #{pageSize}
+  </sql>
+
+  <select id="listByDriverFilter" parameterType="com.juma.vms.common.query.QueryCond" resultType="com.juma.vms.truck.vo.TruckQuery">
+    SELECT e.* FROM(SELECT  <include refid="Filter_Column_List"/> FROM truck t
+    LEFT JOIN truck_tenant tt ON t.truck_id = tt.truck_id
+    LEFT JOIN vendor_truck vt ON t.truck_id = vt.truck_id AND tt.tenant_id = vt.tenant_id
+    WHERE tt.`status` = 1
+    AND t.plate_number like concat('%', #{filters.plateNumber}, '%')
+    AND vt.tenant_id = #{filters.tenantId}
+    AND vt.vendor_id = #{filters.vendorId})e WHERE NOT EXISTS
+    (SELECT c.truck_id FROM capacity_pool c WHERE c.tenant_id = #{filters.tenantId} AND c.is_delete = 0
+    AND c.driver_id is not null AND c.truck_id is not null AND e.truck_id = c.truck_id)
+    LIMIT 0, 15
+  </select>
+
+  <select id="search" parameterType="com.juma.vms.common.query.QueryCond" resultType="com.juma.vms.truck.vo.TruckQuery">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM truck t
+    LEFT JOIN truck_tenant tt ON t.truck_id = tt.truck_id
+    LEFT JOIN capacity_pool c ON t.truck_id = c.truck_id AND c.tenant_id = tt.tenant_id AND c.is_delete = 0
+    <include refid="SEARCH_WHERE_SQL"/>
+    GROUP BY t.truck_id
+    <include refid="searchorderByAndLimitSql"/>
+  </select>
+
+  <select id="searchCount" resultType="java.lang.Integer" parameterType="com.juma.vms.common.query.QueryCond">
+    SELECT count(1) FROM
+    (SELECT count(1) FROM truck t
+    LEFT JOIN truck_tenant tt ON t.truck_id = tt.truck_id
+    LEFT JOIN capacity_pool c ON t.truck_id = c.truck_id AND c.tenant_id = tt.tenant_id AND c.is_delete = 0
+    <include refid="SEARCH_WHERE_SQL" />
+    GROUP BY t.truck_id) a
+  </select>
+
+  <sql id="CapacityPool_Column_List">
+    c.capacity_pool_id, c.tenant_id, c.tenant_code, c.vendor_id, c.area_code, c.truck_id, c.driver_id,
+    c.vehicle_box_type, c.vehicle_box_length, c.vehicle_run_type, c.go_city_license_type, c.status,
+    c.is_delete, c.create_user_id, c.create_time, c.last_update_time, c.last_update_user_id
+  </sql>
+
+  <sql id="SEARCH_CAPACITY_POOL">
+    <where>
+      <if test="filters.tenantId != null"><![CDATA[ and c.tenant_id = #{filters.tenantId} ]]></if>
+      <if test="filters.plateNumber != null"><![CDATA[ and t.plate_number like concat('%', #{filters.plateNumber}, '%') ]]></if>
+      <if test="filters.vendorId != null"><![CDATA[ and c.vendor_id = #{filters.vendorId} ]]></if>
+      <if test="filters.driverId != null"><![CDATA[ and c.driver_id = #{filters.driverId} ]]></if>
+      <if test="filters.status != null"><![CDATA[ and c.status = #{filters.status} ]]></if>
+      <if test="filters.isDelete != null"><![CDATA[ and c.is_delete = #{filters.isDelete} ]]></if>
+    </where>
+  </sql>
+
+  <select id="findByPlateNumber" parameterType="com.juma.vms.common.query.QueryCond" resultType="com.juma.vms.transport.domain.CapacityPool">
+    SELECT
+    <include refid="CapacityPool_Column_List"/>
+    FROM capacity_pool c
+    LEFT JOIN truck t ON t.truck_id = c.truck_id
+    LEFT JOIN truck_tenant tt ON t.truck_id = tt.truck_id AND c.tenant_id = tt.tenant_id
+    <include refid="SEARCH_CAPACITY_POOL"/>
+    limit #{startOffset}, #{pageSize}
+  </select>
+
+  <select id="findByPlateNumberCount" parameterType="com.juma.vms.common.query.QueryCond" resultType="java.lang.Integer">
+    SELECT
+    count(1)
+    FROM capacity_pool c
+    LEFT JOIN truck t ON t.truck_id = c.truck_id
+    LEFT JOIN truck_tenant tt ON t.truck_id = tt.truck_id AND c.tenant_id = tt.tenant_id
+    <include refid="SEARCH_CAPACITY_POOL"/>
+  </select>
+
+</mapper>

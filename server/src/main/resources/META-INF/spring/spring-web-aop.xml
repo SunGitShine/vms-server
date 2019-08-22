@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<aop:config>
+  		<aop:pointcut id="enterExecutionTimeProfilerMethod" expression="execution(* com.juma.vms..service..*(..))
+  														or execution(* com.juma.vms..dao..*(..))
+  														or execution(* com.giants.dal.dao..*(..))
+  														or execution(* com.juma.vms..object..*(..))"/>
+  		<aop:aspect id="enterExecutionTimeProfilerAop" ref="enterExecutionTimeProfilerAop" order="0">
+  			<aop:around method="timerProfiler" pointcut-ref="enterExecutionTimeProfilerMethod"/>
+  		</aop:aspect>
+  	 </aop:config>  	 
+  	  
+  	 <!--AOP for cache-->
+  	 <aop:config>
+  	 	<aop:pointcut id="serviceMethod" expression="execution(* com.juma..service..*(..))"/>
+  	 	<aop:pointcut id="daoMethod" expression="execution(* com.juma..dao..*(..)) or execution(* com.giants.dal.dao..*(..))"/>
+  	 	
+  	 	<aop:aspect id="giantsCacheServiceAop" ref="giantsCacheServiceAop" order="9">
+  	 		<aop:around method="serviceMethodCache" pointcut-ref="serviceMethod"/>
+  	 	</aop:aspect>  	 	  	 	
+  	 	
+  	 	<aop:aspect id="giantsCacheDaoAop" ref="giantsCacheDaoAop" order="9">
+  	 		<aop:around method="serviceMethodCache" pointcut-ref="daoMethod"/>
+  	 	</aop:aspect>
+  	 </aop:config>
+  	 
+     <aop:config>
+  		<aop:pointcut id="txOperation" expression="execution(public * com.juma.vms..service.impl..*Impl.*(..))"/>
+  		<aop:advisor advice-ref="txAdvice" pointcut-ref="txOperation" order="99"/>
+  	 </aop:config>
+  	
+  	 <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+        	<!-- <tx:method name="*" propagation="REQUIRED"/> -->
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="remove*" propagation="REQUIRED"/>
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="create*" propagation="REQUIRED"/>
+            <tx:method name="add*" propagation="REQUIRED"/>
+			<tx:method name="cancel*" propagation="REQUIRED"/>
+			<tx:method name="complete*" propagation="REQUIRED"/>
+			<tx:method name="doWork*" propagation="REQUIRED"/>
+        </tx:attributes>
+     </tx:advice>
+          
+</beans>

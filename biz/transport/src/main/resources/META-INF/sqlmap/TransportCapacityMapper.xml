@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.vms.transport.dao.TransportCapacityMapper">
+  <resultMap id="BaseResultMap" type="com.juma.vms.transport.domain.TransportCapacity">
+    <id column="transport_id" jdbcType="INTEGER" property="transportId" />
+    <result column="tenant_id" jdbcType="INTEGER" property="tenantId" />
+    <result column="tenant_code" jdbcType="VARCHAR" property="tenantCode" />
+    <result column="receive_tenant_id" jdbcType="INTEGER" property="receiveTenantId" />
+    <result column="receive_tenant_code" jdbcType="VARCHAR" property="receiveTenantCode" />
+    <result column="transport_no" jdbcType="VARCHAR" property="transportNo" />
+    <result column="transport_type" jdbcType="INTEGER" property="transportType" />
+    <result column="from_department_id" jdbcType="INTEGER" property="fromDepartmentId" />
+    <result column="from_department_code" jdbcType="VARCHAR" property="fromDepartmentCode" />
+    <result column="from_department_creditcode" jdbcType="VARCHAR" property="fromDepartmentCreditcode" />
+    <result column="to_department_id" jdbcType="INTEGER" property="toDepartmentId" />
+    <result column="to_department_code" jdbcType="VARCHAR" property="toDepartmentCode" />
+    <result column="to_department_creditcode" jdbcType="VARCHAR" property="toDepartmentCreditcode" />
+    <result column="process_instance_id" jdbcType="VARCHAR" property="processInstanceId" />
+    <result column="approval_status" jdbcType="INTEGER" property="approvalStatus" />
+    <result column="attach_url" jdbcType="VARCHAR" property="attachUrl" />
+    <result column="submit_user_id" jdbcType="INTEGER" property="submitUserId" />
+    <result column="submit_time" jdbcType="TIMESTAMP" property="submitTime" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    transport_id, tenant_id, tenant_code, receive_tenant_id, receive_tenant_code, transport_no, 
+    transport_type, from_department_id, from_department_code, from_department_creditcode, 
+    to_department_id, to_department_code, to_department_creditcode, process_instance_id, 
+    approval_status, attach_url, submit_user_id, submit_time, create_user_id, create_time, 
+    last_update_time, last_update_user_id
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.vms.transport.domain.TransportCapacityExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from transport_capacity
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from transport_capacity
+    where transport_id = #{transportId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from transport_capacity
+    where transport_id = #{transportId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.vms.transport.domain.TransportCapacityExample">
+    delete from transport_capacity
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="transport_id" keyProperty="transportId" parameterType="com.juma.vms.transport.domain.TransportCapacity" useGeneratedKeys="true">
+    insert into transport_capacity (tenant_id, tenant_code, receive_tenant_id, 
+      receive_tenant_code, transport_no, transport_type, 
+      from_department_id, from_department_code, from_department_creditcode, 
+      to_department_id, to_department_code, to_department_creditcode, 
+      process_instance_id, approval_status, attach_url, 
+      submit_user_id, submit_time, create_user_id, 
+      create_time, last_update_time, last_update_user_id
+      )
+    values (#{tenantId,jdbcType=INTEGER}, #{tenantCode,jdbcType=VARCHAR}, #{receiveTenantId,jdbcType=INTEGER}, 
+      #{receiveTenantCode,jdbcType=VARCHAR}, #{transportNo,jdbcType=VARCHAR}, #{transportType,jdbcType=INTEGER}, 
+      #{fromDepartmentId,jdbcType=INTEGER}, #{fromDepartmentCode,jdbcType=VARCHAR}, #{fromDepartmentCreditcode,jdbcType=VARCHAR}, 
+      #{toDepartmentId,jdbcType=INTEGER}, #{toDepartmentCode,jdbcType=VARCHAR}, #{toDepartmentCreditcode,jdbcType=VARCHAR}, 
+      #{processInstanceId,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=INTEGER}, #{attachUrl,jdbcType=VARCHAR}, 
+      #{submitUserId,jdbcType=INTEGER}, #{submitTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{lastUpdateTime,jdbcType=TIMESTAMP}, #{lastUpdateUserId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="transport_id" keyProperty="transportId" parameterType="com.juma.vms.transport.domain.TransportCapacity" useGeneratedKeys="true">
+    insert into transport_capacity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="tenantCode != null">
+        tenant_code,
+      </if>
+      <if test="receiveTenantId != null">
+        receive_tenant_id,
+      </if>
+      <if test="receiveTenantCode != null">
+        receive_tenant_code,
+      </if>
+      <if test="transportNo != null">
+        transport_no,
+      </if>
+      <if test="transportType != null">
+        transport_type,
+      </if>
+      <if test="fromDepartmentId != null">
+        from_department_id,
+      </if>
+      <if test="fromDepartmentCode != null">
+        from_department_code,
+      </if>
+      <if test="fromDepartmentCreditcode != null">
+        from_department_creditcode,
+      </if>
+      <if test="toDepartmentId != null">
+        to_department_id,
+      </if>
+      <if test="toDepartmentCode != null">
+        to_department_code,
+      </if>
+      <if test="toDepartmentCreditcode != null">
+        to_department_creditcode,
+      </if>
+      <if test="processInstanceId != null">
+        process_instance_id,
+      </if>
+      <if test="approvalStatus != null">
+        approval_status,
+      </if>
+      <if test="attachUrl != null">
+        attach_url,
+      </if>
+      <if test="submitUserId != null">
+        submit_user_id,
+      </if>
+      <if test="submitTime != null">
+        submit_time,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null">
+        #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveTenantId != null">
+        #{receiveTenantId,jdbcType=INTEGER},
+      </if>
+      <if test="receiveTenantCode != null">
+        #{receiveTenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="transportNo != null">
+        #{transportNo,jdbcType=VARCHAR},
+      </if>
+      <if test="transportType != null">
+        #{transportType,jdbcType=INTEGER},
+      </if>
+      <if test="fromDepartmentId != null">
+        #{fromDepartmentId,jdbcType=INTEGER},
+      </if>
+      <if test="fromDepartmentCode != null">
+        #{fromDepartmentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fromDepartmentCreditcode != null">
+        #{fromDepartmentCreditcode,jdbcType=VARCHAR},
+      </if>
+      <if test="toDepartmentId != null">
+        #{toDepartmentId,jdbcType=INTEGER},
+      </if>
+      <if test="toDepartmentCode != null">
+        #{toDepartmentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="toDepartmentCreditcode != null">
+        #{toDepartmentCreditcode,jdbcType=VARCHAR},
+      </if>
+      <if test="processInstanceId != null">
+        #{processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalStatus != null">
+        #{approvalStatus,jdbcType=INTEGER},
+      </if>
+      <if test="attachUrl != null">
+        #{attachUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="submitUserId != null">
+        #{submitUserId,jdbcType=INTEGER},
+      </if>
+      <if test="submitTime != null">
+        #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.vms.transport.domain.TransportCapacityExample" resultType="java.lang.Long">
+    select count(*) from transport_capacity
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update transport_capacity
+    <set>
+      <if test="record.transportId != null">
+        transport_id = #{record.transportId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantCode != null">
+        tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiveTenantId != null">
+        receive_tenant_id = #{record.receiveTenantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.receiveTenantCode != null">
+        receive_tenant_code = #{record.receiveTenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transportNo != null">
+        transport_no = #{record.transportNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transportType != null">
+        transport_type = #{record.transportType,jdbcType=INTEGER},
+      </if>
+      <if test="record.fromDepartmentId != null">
+        from_department_id = #{record.fromDepartmentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.fromDepartmentCode != null">
+        from_department_code = #{record.fromDepartmentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fromDepartmentCreditcode != null">
+        from_department_creditcode = #{record.fromDepartmentCreditcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.toDepartmentId != null">
+        to_department_id = #{record.toDepartmentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.toDepartmentCode != null">
+        to_department_code = #{record.toDepartmentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.toDepartmentCreditcode != null">
+        to_department_creditcode = #{record.toDepartmentCreditcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.processInstanceId != null">
+        process_instance_id = #{record.processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approvalStatus != null">
+        approval_status = #{record.approvalStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.attachUrl != null">
+        attach_url = #{record.attachUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.submitUserId != null">
+        submit_user_id = #{record.submitUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.submitTime != null">
+        submit_time = #{record.submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateTime != null">
+        last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateUserId != null">
+        last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update transport_capacity
+    set transport_id = #{record.transportId,jdbcType=INTEGER},
+      tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      receive_tenant_id = #{record.receiveTenantId,jdbcType=INTEGER},
+      receive_tenant_code = #{record.receiveTenantCode,jdbcType=VARCHAR},
+      transport_no = #{record.transportNo,jdbcType=VARCHAR},
+      transport_type = #{record.transportType,jdbcType=INTEGER},
+      from_department_id = #{record.fromDepartmentId,jdbcType=INTEGER},
+      from_department_code = #{record.fromDepartmentCode,jdbcType=VARCHAR},
+      from_department_creditcode = #{record.fromDepartmentCreditcode,jdbcType=VARCHAR},
+      to_department_id = #{record.toDepartmentId,jdbcType=INTEGER},
+      to_department_code = #{record.toDepartmentCode,jdbcType=VARCHAR},
+      to_department_creditcode = #{record.toDepartmentCreditcode,jdbcType=VARCHAR},
+      process_instance_id = #{record.processInstanceId,jdbcType=VARCHAR},
+      approval_status = #{record.approvalStatus,jdbcType=INTEGER},
+      attach_url = #{record.attachUrl,jdbcType=VARCHAR},
+      submit_user_id = #{record.submitUserId,jdbcType=INTEGER},
+      submit_time = #{record.submitTime,jdbcType=TIMESTAMP},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.vms.transport.domain.TransportCapacity">
+    update transport_capacity
+    <set>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null">
+        tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveTenantId != null">
+        receive_tenant_id = #{receiveTenantId,jdbcType=INTEGER},
+      </if>
+      <if test="receiveTenantCode != null">
+        receive_tenant_code = #{receiveTenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="transportNo != null">
+        transport_no = #{transportNo,jdbcType=VARCHAR},
+      </if>
+      <if test="transportType != null">
+        transport_type = #{transportType,jdbcType=INTEGER},
+      </if>
+      <if test="fromDepartmentId != null">
+        from_department_id = #{fromDepartmentId,jdbcType=INTEGER},
+      </if>
+      <if test="fromDepartmentCode != null">
+        from_department_code = #{fromDepartmentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fromDepartmentCreditcode != null">
+        from_department_creditcode = #{fromDepartmentCreditcode,jdbcType=VARCHAR},
+      </if>
+      <if test="toDepartmentId != null">
+        to_department_id = #{toDepartmentId,jdbcType=INTEGER},
+      </if>
+      <if test="toDepartmentCode != null">
+        to_department_code = #{toDepartmentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="toDepartmentCreditcode != null">
+        to_department_creditcode = #{toDepartmentCreditcode,jdbcType=VARCHAR},
+      </if>
+      <if test="processInstanceId != null">
+        process_instance_id = #{processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalStatus != null">
+        approval_status = #{approvalStatus,jdbcType=INTEGER},
+      </if>
+      <if test="attachUrl != null">
+        attach_url = #{attachUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="submitUserId != null">
+        submit_user_id = #{submitUserId,jdbcType=INTEGER},
+      </if>
+      <if test="submitTime != null">
+        submit_time = #{submitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where transport_id = #{transportId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.vms.transport.domain.TransportCapacity">
+    update transport_capacity
+    set tenant_id = #{tenantId,jdbcType=INTEGER},
+      tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      receive_tenant_id = #{receiveTenantId,jdbcType=INTEGER},
+      receive_tenant_code = #{receiveTenantCode,jdbcType=VARCHAR},
+      transport_no = #{transportNo,jdbcType=VARCHAR},
+      transport_type = #{transportType,jdbcType=INTEGER},
+      from_department_id = #{fromDepartmentId,jdbcType=INTEGER},
+      from_department_code = #{fromDepartmentCode,jdbcType=VARCHAR},
+      from_department_creditcode = #{fromDepartmentCreditcode,jdbcType=VARCHAR},
+      to_department_id = #{toDepartmentId,jdbcType=INTEGER},
+      to_department_code = #{toDepartmentCode,jdbcType=VARCHAR},
+      to_department_creditcode = #{toDepartmentCreditcode,jdbcType=VARCHAR},
+      process_instance_id = #{processInstanceId,jdbcType=VARCHAR},
+      approval_status = #{approvalStatus,jdbcType=INTEGER},
+      attach_url = #{attachUrl,jdbcType=VARCHAR},
+      submit_user_id = #{submitUserId,jdbcType=INTEGER},
+      submit_time = #{submitTime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER}
+    where transport_id = #{transportId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="transportId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into transport_capacity
+    (tenant_id,tenant_code,receive_tenant_id,receive_tenant_code,transport_no,transport_type,from_department_id,from_department_code,from_department_creditcode,to_department_id,to_department_code,to_department_creditcode,process_instance_id,approval_status,attach_url,submit_user_id,submit_time,create_user_id,create_time,last_update_time,last_update_user_id) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.tenantId},#{item.tenantCode},#{item.receiveTenantId},#{item.receiveTenantCode},#{item.transportNo},#{item.transportType},#{item.fromDepartmentId},#{item.fromDepartmentCode},#{item.fromDepartmentCreditcode},#{item.toDepartmentId},#{item.toDepartmentCode},#{item.toDepartmentCreditcode},#{item.processInstanceId},#{item.approvalStatus},#{item.attachUrl},#{item.submitUserId},#{item.submitTime},#{item.createUserId},#{item.createTime},#{item.lastUpdateTime},#{item.lastUpdateUserId})
+    </foreach>
+  </insert>
+  <update id="updateBatch" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update transport_capacity
+      <set>
+        transport_id = #{item.transportId},
+        tenant_id = #{item.tenantId},
+        tenant_code = #{item.tenantCode},
+        receive_tenant_id = #{item.receiveTenantId},
+        receive_tenant_code = #{item.receiveTenantCode},
+        transport_no = #{item.transportNo},
+        transport_type = #{item.transportType},
+        from_department_id = #{item.fromDepartmentId},
+        from_department_code = #{item.fromDepartmentCode},
+        from_department_creditcode = #{item.fromDepartmentCreditcode},
+        to_department_id = #{item.toDepartmentId},
+        to_department_code = #{item.toDepartmentCode},
+        to_department_creditcode = #{item.toDepartmentCreditcode},
+        process_instance_id = #{item.processInstanceId},
+        approval_status = #{item.approvalStatus},
+        attach_url = #{item.attachUrl},
+        submit_user_id = #{item.submitUserId},
+        submit_time = #{item.submitTime},
+        create_user_id = #{item.createUserId},
+        create_time = #{item.createTime},
+        last_update_time = #{item.lastUpdateTime},
+        last_update_user_id = #{item.lastUpdateUserId},
+      </set>
+      where transport_id = #{item.transportId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update transport_capacity
+      <set>
+        <if test="item.tenantId != null">
+          tenant_id = #{item.tenantId,jdbcType=INTEGER},
+        </if>
+        <if test="item.tenantCode != null">
+          tenant_code = #{item.tenantCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.receiveTenantId != null">
+          receive_tenant_id = #{item.receiveTenantId,jdbcType=INTEGER},
+        </if>
+        <if test="item.receiveTenantCode != null">
+          receive_tenant_code = #{item.receiveTenantCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.transportNo != null">
+          transport_no = #{item.transportNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.transportType != null">
+          transport_type = #{item.transportType,jdbcType=INTEGER},
+        </if>
+        <if test="item.fromDepartmentId != null">
+          from_department_id = #{item.fromDepartmentId,jdbcType=INTEGER},
+        </if>
+        <if test="item.fromDepartmentCode != null">
+          from_department_code = #{item.fromDepartmentCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.fromDepartmentCreditcode != null">
+          from_department_creditcode = #{item.fromDepartmentCreditcode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.toDepartmentId != null">
+          to_department_id = #{item.toDepartmentId,jdbcType=INTEGER},
+        </if>
+        <if test="item.toDepartmentCode != null">
+          to_department_code = #{item.toDepartmentCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.toDepartmentCreditcode != null">
+          to_department_creditcode = #{item.toDepartmentCreditcode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.processInstanceId != null">
+          process_instance_id = #{item.processInstanceId,jdbcType=VARCHAR},
+        </if>
+        <if test="item.approvalStatus != null">
+          approval_status = #{item.approvalStatus,jdbcType=INTEGER},
+        </if>
+        <if test="item.attachUrl != null">
+          attach_url = #{item.attachUrl,jdbcType=VARCHAR},
+        </if>
+        <if test="item.submitUserId != null">
+          submit_user_id = #{item.submitUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.submitTime != null">
+          submit_time = #{item.submitTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.createUserId != null">
+          create_user_id = #{item.createUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.createTime != null">
+          create_time = #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.lastUpdateTime != null">
+          last_update_time = #{item.lastUpdateTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.lastUpdateUserId != null">
+          last_update_user_id = #{item.lastUpdateUserId,jdbcType=INTEGER},
+        </if>
+      </set>
+      where transport_id = #{item.transportId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

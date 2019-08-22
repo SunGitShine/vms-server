@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.vms.transport.dao.TransportCapacityItemMapper">
+  <resultMap id="BaseResultMap" type="com.juma.vms.transport.domain.TransportCapacityItem">
+    <id column="item_id" jdbcType="INTEGER" property="itemId" />
+    <result column="transport_id" jdbcType="INTEGER" property="transportId" />
+    <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+    <result column="truck_id" jdbcType="INTEGER" property="truckId" />
+    <result column="vehicle_id" jdbcType="INTEGER" property="vehicleId" />
+    <result column="plate_number" jdbcType="VARCHAR" property="plateNumber" />
+    <result column="truck_identification_no" jdbcType="VARCHAR" property="truckIdentificationNo" />
+    <result column="vehicle_box_type" jdbcType="INTEGER" property="vehicleBoxType" />
+    <result column="vehicle_box_length" jdbcType="INTEGER" property="vehicleBoxLength" />
+    <result column="tsl_order_no" jdbcType="VARCHAR" property="tslOrderNo" />
+    <result column="crm_customer_id" jdbcType="INTEGER" property="crmCustomerId" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    item_id, transport_id, area_code, truck_id, vehicle_id, plate_number, truck_identification_no, 
+    vehicle_box_type, vehicle_box_length, tsl_order_no, crm_customer_id, status, create_user_id, 
+    create_time, last_update_time, last_update_user_id
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.vms.transport.domain.TransportCapacityItemExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from transport_capacity_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from transport_capacity_item
+    where item_id = #{itemId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from transport_capacity_item
+    where item_id = #{itemId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.vms.transport.domain.TransportCapacityItemExample">
+    delete from transport_capacity_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="item_id" keyProperty="itemId" parameterType="com.juma.vms.transport.domain.TransportCapacityItem" useGeneratedKeys="true">
+    insert into transport_capacity_item (transport_id, area_code, truck_id, 
+      vehicle_id, plate_number, truck_identification_no, 
+      vehicle_box_type, vehicle_box_length, tsl_order_no, 
+      crm_customer_id, status, create_user_id, 
+      create_time, last_update_time, last_update_user_id
+      )
+    values (#{transportId,jdbcType=INTEGER}, #{areaCode,jdbcType=VARCHAR}, #{truckId,jdbcType=INTEGER}, 
+      #{vehicleId,jdbcType=INTEGER}, #{plateNumber,jdbcType=VARCHAR}, #{truckIdentificationNo,jdbcType=VARCHAR}, 
+      #{vehicleBoxType,jdbcType=INTEGER}, #{vehicleBoxLength,jdbcType=INTEGER}, #{tslOrderNo,jdbcType=VARCHAR}, 
+      #{crmCustomerId,jdbcType=INTEGER}, #{status,jdbcType=BIT}, #{createUserId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{lastUpdateTime,jdbcType=TIMESTAMP}, #{lastUpdateUserId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="item_id" keyProperty="itemId" parameterType="com.juma.vms.transport.domain.TransportCapacityItem" useGeneratedKeys="true">
+    insert into transport_capacity_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="transportId != null">
+        transport_id,
+      </if>
+      <if test="areaCode != null">
+        area_code,
+      </if>
+      <if test="truckId != null">
+        truck_id,
+      </if>
+      <if test="vehicleId != null">
+        vehicle_id,
+      </if>
+      <if test="plateNumber != null">
+        plate_number,
+      </if>
+      <if test="truckIdentificationNo != null">
+        truck_identification_no,
+      </if>
+      <if test="vehicleBoxType != null">
+        vehicle_box_type,
+      </if>
+      <if test="vehicleBoxLength != null">
+        vehicle_box_length,
+      </if>
+      <if test="tslOrderNo != null">
+        tsl_order_no,
+      </if>
+      <if test="crmCustomerId != null">
+        crm_customer_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="transportId != null">
+        #{transportId,jdbcType=INTEGER},
+      </if>
+      <if test="areaCode != null">
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="truckId != null">
+        #{truckId,jdbcType=INTEGER},
+      </if>
+      <if test="vehicleId != null">
+        #{vehicleId,jdbcType=INTEGER},
+      </if>
+      <if test="plateNumber != null">
+        #{plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="truckIdentificationNo != null">
+        #{truckIdentificationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleBoxType != null">
+        #{vehicleBoxType,jdbcType=INTEGER},
+      </if>
+      <if test="vehicleBoxLength != null">
+        #{vehicleBoxLength,jdbcType=INTEGER},
+      </if>
+      <if test="tslOrderNo != null">
+        #{tslOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="crmCustomerId != null">
+        #{crmCustomerId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.vms.transport.domain.TransportCapacityItemExample" resultType="java.lang.Long">
+    select count(*) from transport_capacity_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update transport_capacity_item
+    <set>
+      <if test="record.itemId != null">
+        item_id = #{record.itemId,jdbcType=INTEGER},
+      </if>
+      <if test="record.transportId != null">
+        transport_id = #{record.transportId,jdbcType=INTEGER},
+      </if>
+      <if test="record.areaCode != null">
+        area_code = #{record.areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.truckId != null">
+        truck_id = #{record.truckId,jdbcType=INTEGER},
+      </if>
+      <if test="record.vehicleId != null">
+        vehicle_id = #{record.vehicleId,jdbcType=INTEGER},
+      </if>
+      <if test="record.plateNumber != null">
+        plate_number = #{record.plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.truckIdentificationNo != null">
+        truck_identification_no = #{record.truckIdentificationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vehicleBoxType != null">
+        vehicle_box_type = #{record.vehicleBoxType,jdbcType=INTEGER},
+      </if>
+      <if test="record.vehicleBoxLength != null">
+        vehicle_box_length = #{record.vehicleBoxLength,jdbcType=INTEGER},
+      </if>
+      <if test="record.tslOrderNo != null">
+        tsl_order_no = #{record.tslOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.crmCustomerId != null">
+        crm_customer_id = #{record.crmCustomerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=BIT},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateTime != null">
+        last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateUserId != null">
+        last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update transport_capacity_item
+    set item_id = #{record.itemId,jdbcType=INTEGER},
+      transport_id = #{record.transportId,jdbcType=INTEGER},
+      area_code = #{record.areaCode,jdbcType=VARCHAR},
+      truck_id = #{record.truckId,jdbcType=INTEGER},
+      vehicle_id = #{record.vehicleId,jdbcType=INTEGER},
+      plate_number = #{record.plateNumber,jdbcType=VARCHAR},
+      truck_identification_no = #{record.truckIdentificationNo,jdbcType=VARCHAR},
+      vehicle_box_type = #{record.vehicleBoxType,jdbcType=INTEGER},
+      vehicle_box_length = #{record.vehicleBoxLength,jdbcType=INTEGER},
+      tsl_order_no = #{record.tslOrderNo,jdbcType=VARCHAR},
+      crm_customer_id = #{record.crmCustomerId,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=BIT},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.vms.transport.domain.TransportCapacityItem">
+    update transport_capacity_item
+    <set>
+      <if test="transportId != null">
+        transport_id = #{transportId,jdbcType=INTEGER},
+      </if>
+      <if test="areaCode != null">
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="truckId != null">
+        truck_id = #{truckId,jdbcType=INTEGER},
+      </if>
+      <if test="vehicleId != null">
+        vehicle_id = #{vehicleId,jdbcType=INTEGER},
+      </if>
+      <if test="plateNumber != null">
+        plate_number = #{plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="truckIdentificationNo != null">
+        truck_identification_no = #{truckIdentificationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleBoxType != null">
+        vehicle_box_type = #{vehicleBoxType,jdbcType=INTEGER},
+      </if>
+      <if test="vehicleBoxLength != null">
+        vehicle_box_length = #{vehicleBoxLength,jdbcType=INTEGER},
+      </if>
+      <if test="tslOrderNo != null">
+        tsl_order_no = #{tslOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="crmCustomerId != null">
+        crm_customer_id = #{crmCustomerId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=BIT},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where item_id = #{itemId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.vms.transport.domain.TransportCapacityItem">
+    update transport_capacity_item
+    set transport_id = #{transportId,jdbcType=INTEGER},
+      area_code = #{areaCode,jdbcType=VARCHAR},
+      truck_id = #{truckId,jdbcType=INTEGER},
+      vehicle_id = #{vehicleId,jdbcType=INTEGER},
+      plate_number = #{plateNumber,jdbcType=VARCHAR},
+      truck_identification_no = #{truckIdentificationNo,jdbcType=VARCHAR},
+      vehicle_box_type = #{vehicleBoxType,jdbcType=INTEGER},
+      vehicle_box_length = #{vehicleBoxLength,jdbcType=INTEGER},
+      tsl_order_no = #{tslOrderNo,jdbcType=VARCHAR},
+      crm_customer_id = #{crmCustomerId,jdbcType=INTEGER},
+      status = #{status,jdbcType=BIT},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER}
+    where item_id = #{itemId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="itemId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into transport_capacity_item
+    (transport_id,area_code,truck_id,vehicle_id,plate_number,truck_identification_no,vehicle_box_type,vehicle_box_length,tsl_order_no,crm_customer_id,status,create_user_id,create_time,last_update_time,last_update_user_id) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.transportId},#{item.areaCode},#{item.truckId},#{item.vehicleId},#{item.plateNumber},#{item.truckIdentificationNo},#{item.vehicleBoxType},#{item.vehicleBoxLength},#{item.tslOrderNo},#{item.crmCustomerId},#{item.status},#{item.createUserId},#{item.createTime},#{item.lastUpdateTime},#{item.lastUpdateUserId})
+    </foreach>
+  </insert>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update transport_capacity_item
+      <set>
+        <if test="item.transportId != null">
+          transport_id = #{item.transportId,jdbcType=INTEGER},
+        </if>
+        <if test="item.areaCode != null">
+          area_code = #{item.areaCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.truckId != null">
+          truck_id = #{item.truckId,jdbcType=INTEGER},
+        </if>
+        <if test="item.vehicleId != null">
+          vehicle_id = #{item.vehicleId,jdbcType=INTEGER},
+        </if>
+        <if test="item.plateNumber != null">
+          plate_number = #{item.plateNumber,jdbcType=VARCHAR},
+        </if>
+        <if test="item.truckIdentificationNo != null">
+          truck_identification_no = #{item.truckIdentificationNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.vehicleBoxType != null">
+          vehicle_box_type = #{item.vehicleBoxType,jdbcType=INTEGER},
+        </if>
+        <if test="item.vehicleBoxLength != null">
+          vehicle_box_length = #{item.vehicleBoxLength,jdbcType=INTEGER},
+        </if>
+        <if test="item.tslOrderNo != null">
+          tsl_order_no = #{item.tslOrderNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.crmCustomerId != null">
+          crm_customer_id = #{item.crmCustomerId,jdbcType=INTEGER},
+        </if>
+        <if test="item.status != null">
+          status = #{item.status,jdbcType=BIT},
+        </if>
+        <if test="item.createUserId != null">
+          create_user_id = #{item.createUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.createTime != null">
+          create_time = #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.lastUpdateTime != null">
+          last_update_time = #{item.lastUpdateTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.lastUpdateUserId != null">
+          last_update_user_id = #{item.lastUpdateUserId,jdbcType=INTEGER},
+        </if>
+      </set>
+      where item_id = #{item.itemId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

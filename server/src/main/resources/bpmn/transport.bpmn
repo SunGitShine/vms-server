@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/test" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1554972033537" name="" targetNamespace="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema">
+  <process id="transport_send" isClosed="false" isExecutable="true" name="运力输送审批" processType="None">
+    <documentation id="transport_send_D_1"><![CDATA[资金调拨]]></documentation>
+    <startEvent activiti:initiator="applyUserId" id="startevent1" name="开始"/>
+    <userTask activiti:assignee="${applyUserId}" activiti:category="transport_send" activiti:exclusive="true" id="usertask1" name="第一步审核"/>
+    <userTask activiti:assignee="${applyUserId}" activiti:category="transport_send" activiti:exclusive="true" id="usertask2" name="调整申请"/>
+    <endEvent id="endevent1" name="结束"/>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="usertask1">
+      <extensionElements>
+        <activiti:executionListener class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener" event="take">
+          <activiti:field name="script">
+            <activiti:string><![CDATA[execution.setVariable("status", "AUDITING")]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="language">
+            <activiti:string><![CDATA[groovy]]></activiti:string>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="HQ_GM_OK" name="同意" sourceRef="usertask1" targetRef="usertask3">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approvalKey == 'HQ_GM_OK'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="HQ_GM_DIS" name="不同意" sourceRef="usertask1" targetRef="usertask2">
+      <extensionElements>
+        <activiti:executionListener class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener" event="take">
+          <activiti:field name="script">
+            <activiti:string><![CDATA[execution.setVariable("status", "REJECT")]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="language">
+            <activiti:string><![CDATA[groovy]]></activiti:string>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approvalKey == 'HQ_GM_DIS'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="REAPPLY_OK" name="重新申请" sourceRef="usertask2" targetRef="usertask1">
+      <extensionElements>
+        <activiti:executionListener class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener" event="take">
+          <activiti:field name="script">
+            <activiti:string><![CDATA[execution.setVariable("status", "AUDITING")]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="language">
+            <activiti:string><![CDATA[groovy]]></activiti:string>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approvalKey == 'REAPPLY_OK'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="REAPPLY_DIS" name="放弃申请" sourceRef="usertask2" targetRef="endevent1">
+      <extensionElements>
+        <activiti:executionListener class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener" event="take">
+          <activiti:field name="script">
+            <activiti:string><![CDATA[execution.setVariable("status", "CANCEL")]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="language">
+            <activiti:string><![CDATA[groovy]]></activiti:string>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approvalKey == 'REAPPLY_DIS'}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask activiti:assignee="${applyUserId}" activiti:category="transport_send" activiti:exclusive="true" id="usertask3" name="第二步审核"/>
+    <sequenceFlow id="aa" name="同意" sourceRef="usertask3" targetRef="endevent1">
+      <extensionElements>
+        <activiti:executionListener class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener" event="take">
+          <activiti:field name="script">
+            <activiti:string><![CDATA[execution.setVariable("status", "AUDITED")]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="language">
+            <activiti:string><![CDATA[groovy]]></activiti:string>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approvalKey == 'aa'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="bb" name="不同意" sourceRef="usertask3" targetRef="usertask2">
+      <extensionElements>
+        <activiti:executionListener class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener" event="take">
+          <activiti:field name="script">
+            <activiti:string><![CDATA[execution.setVariable("status", "REJECT")]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="language">
+            <activiti:string><![CDATA[groovy]]></activiti:string>
+          </activiti:field>
+        </activiti:executionListener>
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approvalKey == 'bb'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram documentation="background=#3C3F41;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
+    <bpmndi:BPMNPlane bpmnElement="transport_send">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="Shape-startevent1">
+        <omgdc:Bounds height="32.0" width="32.0" x="30.0" y="60.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask1" id="Shape-usertask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="176.0" y="50.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask2" id="Shape-usertask2">
+        <omgdc:Bounds height="55.0" width="105.0" x="370.0" y="140.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="Shape-endevent1">
+        <omgdc:Bounds height="32.0" width="32.0" x="530.0" y="60.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="usertask3" id="Shape-usertask3">
+        <omgdc:Bounds height="55.0" width="105.0" x="370.0" y="50.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="105.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="aa" id="BPMNEdge_aa" sourceElement="usertask3" targetElement="endevent1">
+        <omgdi:waypoint x="475.0" y="77.5"/>
+        <omgdi:waypoint x="530.0" y="76.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="475.0" y="77.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="bb" id="BPMNEdge_bb" sourceElement="usertask3" targetElement="usertask2">
+        <omgdi:waypoint x="422.5" y="105.0"/>
+        <omgdi:waypoint x="422.5" y="140.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="36.0" x="422.0" y="105.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="HQ_GM_OK" id="BPMNEdge_HQ_GM_OK" sourceElement="usertask1" targetElement="usertask3">
+        <omgdi:waypoint x="281.0" y="77.5"/>
+        <omgdi:waypoint x="370.0" y="77.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="24.0" x="299.0" y="71.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="REAPPLY_DIS" id="BPMNEdge_REAPPLY_DIS" sourceElement="usertask2" targetElement="endevent1">
+        <omgdi:waypoint x="475.0" y="167.0"/>
+        <omgdi:waypoint x="547.0" y="167.0"/>
+        <omgdi:waypoint x="547.0" y="91.96871942267131"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="479.0" y="161.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1" sourceElement="startevent1" targetElement="usertask1">
+        <omgdi:waypoint x="62.0" y="76.0"/>
+        <omgdi:waypoint x="176.0" y="77.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="-1.0" width="-1.0" x="-1.0" y="-1.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="REAPPLY_OK" id="BPMNEdge_REAPPLY_OK" sourceElement="usertask2" targetElement="usertask1">
+        <omgdi:waypoint x="370.0" y="167.0"/>
+        <omgdi:waypoint x="228.0" y="167.0"/>
+        <omgdi:waypoint x="228.0" y="105.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="48.0" x="301.0" y="161.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="HQ_GM_DIS" id="BPMNEdge_HQ_GM_DIS" sourceElement="usertask1" targetElement="usertask2">
+        <omgdi:waypoint x="281.0" y="77.5"/>
+        <omgdi:waypoint x="370.0" y="167.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="36.0" x="228.0" y="105.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

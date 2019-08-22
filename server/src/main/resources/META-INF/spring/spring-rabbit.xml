@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/rabbit
+    http://www.springframework.org/schema/rabbit/spring-rabbit-1.6.xsd">
+
+    <rabbit:admin connection-factory="rabbitConnectionFactory" />
+
+    <rabbit:connection-factory id="rabbitConnectionFactory"
+        host="${rabbit.host}" username="${rabbit.username}" password="${rabbit.password}"
+        port="${rabbit.port}" />
+    
+    <bean id="fastjsonMessageConverter" class="com.juma.vms.mq.rabbit.base.FastJsonMessageConverter" />
+    
+    <rabbit:template id="amqpTemplate" exchange="vmsMqExchange"
+        connection-factory="rabbitConnectionFactory" message-converter="fastjsonMessageConverter" />
+
+    <bean id="mqSendService" class="com.juma.vms.mq.rabbit.send.MqSendService">
+        <property name="amqpTemplate" ref="amqpTemplate"></property>
+    </bean>
+
+    <!-- crm -->
+    <bean id="messageCrmVendorListener" class="com.juma.vms.mq.rabbit.receive.MessageCrmVendorListener" />
+    <!-- 用户中心 -->
+    <bean id="messageAuthUserListener" class="com.juma.vms.mq.rabbit.receive.MessageAuthUserListener" />
+    <!-- 用户中心 -->
+    <bean id="messageVmsWritelogListener" class="com.juma.vms.mq.rabbit.receive.MessageVmsWritelogListener" />
+    <!-- AMS -->
+    <bean id="messageAmsVehicleListener" class="com.juma.vms.mq.rabbit.receive.MessageAmsVehicleListener" />
+    <!-- SCM -->
+    <bean id="messageScmReturnStorageListener" class="com.juma.vms.mq.rabbit.receive.MessageScmReturnStorageListener" />
+
+    <!-- crm同步承运商数据 -->
+    <rabbit:queue name="${rabbit.crm.vendor.queue}" durable="true" auto-delete="false" exclusive="false" />
+    <!-- 用户中心同步承运商数据 -->
+    <rabbit:queue name="${rabbit.auth.vendor.queue}" durable="true" auto-delete="false" exclusive="false" />
+
+    <rabbit:fanout-exchange name="${rabbit.crm.vendor.exchange}" durable="true" auto-delete="false">
+        <rabbit:bindings>
+            <rabbit:binding queue="${rabbit.crm.vendor.queue}" />
+        </rabbit:bindings>
+    </rabbit:fanout-exchange>
+
+    <rabbit:fanout-exchange name="${rabbit.auth.vendor.exchange}" durable="true" auto-delete="false">
+        <rabbit:bindings>
+            <rabbit:binding queue="${rabbit.auth.vendor.queue}" />
+        </rabbit:bindings>
+    </rabbit:fanout-exchange>
+
+    <rabbit:listener-container channel-transacted="true" connection-factory="rabbitConnectionFactory" acknowledge="auto">
+        <rabbit:listener queues="${rabbit.crm.vendor.queue}" ref="messageCrmVendorListener" />
+        <rabbit:listener queues="${rabbit.auth.vendor.queue}" ref="messageAuthUserListener" />
+        <rabbit:listener queues="${vehicle.info.queue.name}" ref="messageAmsVehicleListener" />
+        <rabbit:listener queues="${rabbit.vms.writelog.info.queue.name}" ref="messageVmsWritelogListener" />
+        <rabbit:listener queues="${rabbit.truck.return.storage.queue.name}" ref="messageScmReturnStorageListener" />
+    </rabbit:listener-container>
+
+    <!-- 异步写日志 -->
+    <rabbit:queue name="${rabbit.vms.writelog.info.queue.name}" />
+    <rabbit:fanout-exchange id="${rabbit.vms.writelog.info.change.exchange}" name="${rabbit.vms.writelog.info.change.exchange}" durable="true" auto-delete="false" >
+        <rabbit:bindings>
+            <rabbit:binding queue="${rabbit.vms.writelog.info.queue.name}" />
+        </rabbit:bindings>
+    </rabbit:fanout-exchange>
+
+    <!-- 通知认领公司变更 -->
+    <rabbit:fanout-exchange id="${vms.fanout.truck.company.change.exchange}" name="${vms.fanout.truck.company.change.exchange}" durable="true" auto-delete="false" />
+
+    <!-- AMS同步车辆数据 -->
+    <rabbit:queue name="${vehicle.info.queue.name}" durable="true" auto-delete="false" exclusive="false"/>
+    <rabbit:fanout-exchange name="${vehicle.info.change.exchange}" durable="true" auto-delete="false">
+        <rabbit:bindings>
+            <rabbit:binding queue="${vehicle.info.queue.name}" />
+        </rabbit:bindings>
+    </rabbit:fanout-exchange>
+
+    <!-- 退车入库之后,SCM同步车辆数据给 -->
+    <rabbit:queue name="${rabbit.truck.return.storage.queue.name}" durable="true" auto-delete="false" exclusive="false"/>
+    <rabbit:fanout-exchange name="${rabbit.truck.return.storage.change.exchange}" durable="true" auto-delete="false">
+        <rabbit:bindings>
+            <rabbit:binding queue="${rabbit.truck.return.storage.queue.name}" />
+        </rabbit:bindings>
+    </rabbit:fanout-exchange>
+
+</beans>

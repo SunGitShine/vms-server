@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://code.alibabatech.com/schema/dubbo
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <dubbo:consumer check="false"  timeout="10000" retries="0" />
+
+    <!--用户中心-->
+    <dubbo:reference id="userService"  interface="com.juma.auth.user.service.UserService" version="${dubbo.reference.auth.version}" />
+    <dubbo:reference id="authorityService"  interface="com.juma.auth.authority.service.AuthorityService" version="${dubbo.reference.auth.version}" />
+    <dubbo:reference id="tenantService" interface="com.juma.auth.tenant.service.TenantService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="businessAreaService" interface="com.juma.auth.conf.service.BusinessAreaService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="ecoUserService" interface="com.juma.auth.user.service.EcoUserService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="departmentService" interface="com.juma.auth.employee.service.DepartmentService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="eCompanyService" interface="com.juma.auth.employee.service.ECompanyService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="operationLogService" interface="com.juma.log.service.OperationLogService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="systemAuthService" interface="com.juma.auth.conf.service.SystemAuthService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="confParamService" interface="com.juma.conf.service.ConfParamService" version="${dubbo.reference.auth.version}"/>
+    <dubbo:reference id="departmentSupportService" interface="com.juma.auth.support.service.DepartmentSupportService" version="${dubbo.reference.auth.version}"/>
+
+    <!-- SCM -->
+    <dubbo:reference id="propertyService" interface="com.juma.scm.product.service.PropertyService" version="${dubbo.reference.scm.version}"/>
+    <dubbo:reference id="propertyValueService" interface="com.juma.scm.product.service.PropertyValueService" version="${dubbo.reference.scm.version}"/>
+    <dubbo:reference id="brandService" interface="com.juma.scm.product.service.BrandService" version="${dubbo.reference.scm.version}"/>
+    <dubbo:reference id="goodsService" interface="com.juma.scm.storage.service.GoodsService" version="${dubbo.reference.scm.version}"/>
+    <dubbo:reference id="scm4VmsService" interface="com.juma.scm.support.service.Scm4VmsService" version="${dubbo.reference.scm.version}"/>
+
+    <!-- AMS -->
+    <dubbo:reference id="amsServiceV2" interface="com.juma.server.vm.service.vehicle.AmsServiceV2" version="${dubbo.reference.vm.version}"/>
+    <dubbo:reference id="amsService" interface="com.juma.server.vm.service.vehicle.AmsService" version="${dubbo.reference.vm.version}"/>
+    <dubbo:reference id="vehicleService" interface="com.juma.server.vm.service.vehicle.VehicleService" version="${dubbo.reference.vm.version}"/>
+    <dubbo:reference id="vehicleExtendService" interface="com.juma.server.vm.service.vehicle.VehicleExtendService" version="${dubbo.reference.vm.version}"/>
+    <dubbo:reference id="driverLicenseService" interface="com.juma.server.vm.service.vehicle.DriverLicenseService" version="${dubbo.reference.vm.version}"/>
+    <dubbo:reference id="tenantVehicleRelationService" interface="com.juma.server.vm.service.vehicle.TenantVehicleRelationService" version="${dubbo.reference.vm.version}"/>
+    <dubbo:reference id="drivingLicenseService" interface="com.juma.server.vm.service.vehicle.DrivingLicenseService" version="${dubbo.reference.vm.version}"/>
+    <!-- CRM -->
+    <dubbo:reference id="crmService" interface="com.juma.crm.support.service.CrmService" version="${dubbo.reference.crm.version}"/>
+
+    <!-- Thirdparty -->
+    <dubbo:reference id="enterpriseInformationService" interface="com.juma.thirdparty.service.EnterpriseInformationService"
+                     version="${dubbo.reference.thirdparty.version}"/>
+    <dubbo:reference id="identificationCardAuthenticateService" interface="com.juma.thirdparty.service.IdentificationCardAuthenticateService"
+                     version="${dubbo.reference.thirdparty.version}"/>
+
+    <!-- TMS -->
+    <dubbo:reference id="truckTypeService" interface="com.juma.tgm.truck.service.TruckTypeService" version="${dubbo.reference.tgm.version}"/>
+
+    <!--消息中心-->
+    <dubbo:reference id="messageServiceProvider" interface="com.juma.message.gateway.service.MessageServiceProvider" version="${dubbo.reference.message.version}"/>
+
+    <!--工作流-->
+    <dubbo:reference id="taskService" interface="com.juma.workflow.core.service.TaskService" version="${dubbo.reference.workflow.version}"/>
+    <dubbo:reference id="processService" interface="com.juma.workflow.core.service.ProcessService" version="${dubbo.reference.workflow.version}"/>
+
+    <!-- ocr识别 -->
+    <dubbo:reference id="driveLicenseService" interface="com.juma.thirdparty.service.DriveLicenseService" version="${dubbo.reference.thirdparty.version}"/>
+    <dubbo:reference id="identificationCardOcrService" interface="com.juma.thirdparty.service.IdentificationCardOcrService" version="${dubbo.reference.thirdparty.version}"/>
+
+    <!-- TSL -->
+    <dubbo:reference id="tslCustomerInfoService" interface="com.juma.tsl.support.service.TslCustomerInfoService" version="${dubbo.reference.tsl.version}"/>
+
+    <!-- 主数据中心 -->
+    <dubbo:reference id="personService" interface="com.juma.mdc.mdata.service.PersonService" version="${dubbo.reference.mdc.version}"/>
+    <dubbo:reference id="enterpriseService" interface="com.juma.mdc.mdata.service.EnterpriseService" version="${dubbo.reference.mdc.version}"/>
+
+</beans>

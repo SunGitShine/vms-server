@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.vms.truck.dao.TruckTenantMapper">
+  <resultMap id="BaseResultMap" type="com.juma.vms.truck.domain.TruckTenant">
+    <id column="truck_tenant_id" jdbcType="INTEGER" property="truckTenantId" />
+    <result column="truck_id" jdbcType="INTEGER" property="truckId" />
+    <result column="tenant_id" jdbcType="INTEGER" property="tenantId" />
+    <result column="tenant_code" jdbcType="VARCHAR" property="tenantCode" />
+    <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+    <result column="is_owner" jdbcType="BIT" property="isOwner" />
+    <result column="is_receivable" jdbcType="BIT" property="isReceivable" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="truck_belong_to_company" jdbcType="INTEGER" property="truckBelongToCompany" />
+    <result column="truck_belong_to_company_code" jdbcType="VARCHAR" property="truckBelongToCompanyCode" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.singleValue and !criterion.noValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+                <when test="criterion.likeListValue">
+                  and
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator="or">
+                    ${criterion.condition} concat(#{listItem},'%')
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    truck_tenant_id, truck_id, tenant_id, tenant_code, area_code, is_owner, is_receivable, 
+    status, truck_belong_to_company, truck_belong_to_company_code, create_user_id, create_time, 
+    last_update_user_id, last_update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.juma.vms.truck.domain.TruckTenantExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from truck_tenant
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="startOffSet != null and startOffSet>=0">
+      limit ${startOffSet} , ${size}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from truck_tenant
+    where truck_tenant_id = #{truckTenantId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from truck_tenant
+    where truck_tenant_id = #{truckTenantId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.juma.vms.truck.domain.TruckTenantExample">
+    delete from truck_tenant
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="truck_tenant_id" keyProperty="truckTenantId" parameterType="com.juma.vms.truck.domain.TruckTenant" useGeneratedKeys="true">
+    insert into truck_tenant (truck_id, tenant_id, tenant_code, 
+      area_code, is_owner, is_receivable, 
+      status, truck_belong_to_company, truck_belong_to_company_code, 
+      create_user_id, create_time, last_update_user_id, 
+      last_update_time)
+    values (#{truckId,jdbcType=INTEGER}, #{tenantId,jdbcType=INTEGER}, #{tenantCode,jdbcType=VARCHAR}, 
+      #{areaCode,jdbcType=VARCHAR}, #{isOwner,jdbcType=BIT}, #{isReceivable,jdbcType=BIT}, 
+      #{status,jdbcType=INTEGER}, #{truckBelongToCompany,jdbcType=INTEGER}, #{truckBelongToCompanyCode,jdbcType=VARCHAR}, 
+      #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{lastUpdateUserId,jdbcType=INTEGER}, 
+      #{lastUpdateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="truck_tenant_id" keyProperty="truckTenantId" parameterType="com.juma.vms.truck.domain.TruckTenant" useGeneratedKeys="true">
+    insert into truck_tenant
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="truckId != null">
+        truck_id,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="tenantCode != null">
+        tenant_code,
+      </if>
+      <if test="areaCode != null">
+        area_code,
+      </if>
+      <if test="isOwner != null">
+        is_owner,
+      </if>
+      <if test="isReceivable != null">
+        is_receivable,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="truckBelongToCompany != null">
+        truck_belong_to_company,
+      </if>
+      <if test="truckBelongToCompanyCode != null">
+        truck_belong_to_company_code,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id,
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="truckId != null">
+        #{truckId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null">
+        #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null">
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isOwner != null">
+        #{isOwner,jdbcType=BIT},
+      </if>
+      <if test="isReceivable != null">
+        #{isReceivable,jdbcType=BIT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="truckBelongToCompany != null">
+        #{truckBelongToCompany,jdbcType=INTEGER},
+      </if>
+      <if test="truckBelongToCompanyCode != null">
+        #{truckBelongToCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.juma.vms.truck.domain.TruckTenantExample" resultType="java.lang.Long">
+    select count(*) from truck_tenant
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update truck_tenant
+    <set>
+      <if test="record.truckTenantId != null">
+        truck_tenant_id = #{record.truckTenantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.truckId != null">
+        truck_id = #{record.truckId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantCode != null">
+        tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaCode != null">
+        area_code = #{record.areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isOwner != null">
+        is_owner = #{record.isOwner,jdbcType=BIT},
+      </if>
+      <if test="record.isReceivable != null">
+        is_receivable = #{record.isReceivable,jdbcType=BIT},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.truckBelongToCompany != null">
+        truck_belong_to_company = #{record.truckBelongToCompany,jdbcType=INTEGER},
+      </if>
+      <if test="record.truckBelongToCompanyCode != null">
+        truck_belong_to_company_code = #{record.truckBelongToCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUserId != null">
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateUserId != null">
+        last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.lastUpdateTime != null">
+        last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update truck_tenant
+    set truck_tenant_id = #{record.truckTenantId,jdbcType=INTEGER},
+      truck_id = #{record.truckId,jdbcType=INTEGER},
+      tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      tenant_code = #{record.tenantCode,jdbcType=VARCHAR},
+      area_code = #{record.areaCode,jdbcType=VARCHAR},
+      is_owner = #{record.isOwner,jdbcType=BIT},
+      is_receivable = #{record.isReceivable,jdbcType=BIT},
+      status = #{record.status,jdbcType=INTEGER},
+      truck_belong_to_company = #{record.truckBelongToCompany,jdbcType=INTEGER},
+      truck_belong_to_company_code = #{record.truckBelongToCompanyCode,jdbcType=VARCHAR},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{record.lastUpdateUserId,jdbcType=INTEGER},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.juma.vms.truck.domain.TruckTenant">
+    update truck_tenant
+    <set>
+      <if test="truckId != null">
+        truck_id = #{truckId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null">
+        tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null">
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isOwner != null">
+        is_owner = #{isOwner,jdbcType=BIT},
+      </if>
+      <if test="isReceivable != null">
+        is_receivable = #{isReceivable,jdbcType=BIT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="truckBelongToCompany != null">
+        truck_belong_to_company = #{truckBelongToCompany,jdbcType=INTEGER},
+      </if>
+      <if test="truckBelongToCompanyCode != null">
+        truck_belong_to_company_code = #{truckBelongToCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateUserId != null">
+        last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdateTime != null">
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where truck_tenant_id = #{truckTenantId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.juma.vms.truck.domain.TruckTenant">
+    update truck_tenant
+    set truck_id = #{truckId,jdbcType=INTEGER},
+      tenant_id = #{tenantId,jdbcType=INTEGER},
+      tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      area_code = #{areaCode,jdbcType=VARCHAR},
+      is_owner = #{isOwner,jdbcType=BIT},
+      is_receivable = #{isReceivable,jdbcType=BIT},
+      status = #{status,jdbcType=INTEGER},
+      truck_belong_to_company = #{truckBelongToCompany,jdbcType=INTEGER},
+      truck_belong_to_company_code = #{truckBelongToCompanyCode,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_update_user_id = #{lastUpdateUserId,jdbcType=INTEGER},
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP}
+    where truck_tenant_id = #{truckTenantId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" keyProperty="truckTenantId" parameterType="java.util.List" useGeneratedKeys="true">
+    insert into truck_tenant
+    (truck_id,tenant_id,tenant_code,area_code,is_owner,is_receivable,status,truck_belong_to_company,truck_belong_to_company_code,create_user_id,create_time,last_update_user_id,last_update_time) values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.truckId},#{item.tenantId},#{item.tenantCode},#{item.areaCode},#{item.isOwner},#{item.isReceivable},#{item.status},#{item.truckBelongToCompany},#{item.truckBelongToCompanyCode},#{item.createUserId},#{item.createTime},#{item.lastUpdateUserId},#{item.lastUpdateTime})
+    </foreach>
+  </insert>
+  <update id="updateBatch" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update truck_tenant
+      <set>
+        truck_tenant_id = #{item.truckTenantId},
+        truck_id = #{item.truckId},
+        tenant_id = #{item.tenantId},
+        tenant_code = #{item.tenantCode},
+        area_code = #{item.areaCode},
+        is_owner = #{item.isOwner},
+        is_receivable = #{item.isReceivable},
+        status = #{item.status},
+        truck_belong_to_company = #{item.truckBelongToCompany},
+        truck_belong_to_company_code = #{item.truckBelongToCompanyCode},
+        create_user_id = #{item.createUserId},
+        create_time = #{item.createTime},
+        last_update_user_id = #{item.lastUpdateUserId},
+        last_update_time = #{item.lastUpdateTime},
+      </set>
+      where truck_tenant_id = #{item.truckTenantId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="updateBatchByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="item" open="" separator=";">
+      update truck_tenant
+      <set>
+        <if test="item.truckId != null">
+          truck_id = #{item.truckId,jdbcType=INTEGER},
+        </if>
+        <if test="item.tenantId != null">
+          tenant_id = #{item.tenantId,jdbcType=INTEGER},
+        </if>
+        <if test="item.tenantCode != null">
+          tenant_code = #{item.tenantCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.areaCode != null">
+          area_code = #{item.areaCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.isOwner != null">
+          is_owner = #{item.isOwner,jdbcType=BIT},
+        </if>
+        <if test="item.isReceivable != null">
+          is_receivable = #{item.isReceivable,jdbcType=BIT},
+        </if>
+        <if test="item.status != null">
+          status = #{item.status,jdbcType=INTEGER},
+        </if>
+        <if test="item.truckBelongToCompany != null">
+          truck_belong_to_company = #{item.truckBelongToCompany,jdbcType=INTEGER},
+        </if>
+        <if test="item.truckBelongToCompanyCode != null">
+          truck_belong_to_company_code = #{item.truckBelongToCompanyCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.createUserId != null">
+          create_user_id = #{item.createUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.createTime != null">
+          create_time = #{item.createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.lastUpdateUserId != null">
+          last_update_user_id = #{item.lastUpdateUserId,jdbcType=INTEGER},
+        </if>
+        <if test="item.lastUpdateTime != null">
+          last_update_time = #{item.lastUpdateTime,jdbcType=TIMESTAMP},
+        </if>
+      </set>
+      where truck_tenant_id = #{item.truckTenantId,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

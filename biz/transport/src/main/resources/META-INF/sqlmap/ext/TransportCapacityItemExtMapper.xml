@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.juma.vms.transport.dao.ext.TransportCapacityItemExtMapper">
+  <resultMap id="BaseResultMap" type="com.juma.vms.transport.domain.TransportCapacityItem">
+    <id column="item_id" jdbcType="INTEGER" property="itemId" />
+    <result column="transport_id" jdbcType="INTEGER" property="transportId" />
+    <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
+    <result column="truck_id" jdbcType="INTEGER" property="truckId" />
+    <result column="vehicle_id" jdbcType="INTEGER" property="vehicleId" />
+    <result column="plate_number" jdbcType="VARCHAR" property="plateNumber" />
+    <result column="truck_identification_no" jdbcType="VARCHAR" property="truckIdentificationNo" />
+    <result column="vehicle_box_type" jdbcType="INTEGER" property="vehicleBoxType" />
+    <result column="vehicle_box_length" jdbcType="INTEGER" property="vehicleBoxLength" />
+    <result column="tsl_order_no" jdbcType="VARCHAR" property="tslOrderNo" />
+    <result column="crm_customer_id" jdbcType="INTEGER" property="crmCustomerId" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+    <result column="last_update_user_id" jdbcType="INTEGER" property="lastUpdateUserId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    item_id, transport_id, area_code, truck_id, vehicle_id, plate_number, truck_identification_no,
+    vehicle_box_type, vehicle_box_length, tsl_order_no, crm_customer_id, status, create_user_id,
+    create_time, last_update_time, last_update_user_id
+  </sql>
+  <select id="selectPlateNumber" resultType="java.lang.String" parameterType="java.lang.Integer">
+    select plate_number
+    from transport_capacity_item
+    where transport_id = #{transportId}
+  </select>
+</mapper>
